@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Teste Socket.IO - Todo App</title>
+    <script src="/socket.io/socket.io.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 700px; margin: 0 auto; padding: 20px; }
+        .conexao { background: #28a745; color: white; padding: 10px; border-radius: 4px; margin-bottom: 20px; }
+        .erro { background: #dc3545; }
+        input { padding: 8px; margin: 5px 0; }
+        button { padding: 6px 12px; margin: 2px; border: none; cursor: pointer; }
+        .btn-primary { background: #007bff; color: white; }
+        .btn-danger { background: #dc3545; color: white; }
+        .btn-success { background: #28a745; color: white; }
+        .btn-secondary { background: #6c757d; color: white; }
+        .tarefa { padding: 12px; border: 1px solid #ddd; margin: 8px 0; border-radius: 4px; }
+        .tarefa-editando { background-color: #fff3cd; }
+        .acoes-tarefa { margin-top: 8px; }
+        .form-edit { display: none; margin-top: 8px; }
+        .form-edit.visivel { display: block; }
+        .titulo-tarefa { cursor: pointer; font-weight: bold; margin-bottom: 4px; }
+        .tarefa-concluida { text-decoration: line-through; color: #6c757d; }
+        .status-concluida { font-size: 0.9em; color: #28a745; margin-left: 8px; }
+    </style>
+</head>
+<body>
+    <h1>Todo App - Teste Socket.IO</h1>
+    <div id="status-conexao" class="conexao">
+        Status: <span id="status">Conectando...</span> |
+        Clientes: <span id="contador-clientes">0</span>
+    </div>
+    <div>
+        <h3>Criar Nova Tarefa</h3>
+        <input type="text" id="titulo-tarefa" placeholder="Título da tarefa">
+        <button onclick="criarTarefa()" class="btn-primary">Criar Tarefa</button>
+    </div>
+    <div>
+        <h3>Tarefas (<span id="contador-tarefas">0</span>)</h3>
+        <div id="lista-tarefas">
+            <p id="sem-tarefas">Nenhuma tarefa criada.</p>
+        </div>
+    </div>
+
+    <script>
+        const socket = io('http://localhost:3000');
+        const statusEl = document.getElementById('status');
+        const statusConexaoEl = document.getElementById('status-conexao');
+        const contadorClientesEl = document.getElementById('contador-clientes');
+        const listaTarefasEl = document.getElementById('lista-tarefas');
+        const contadorTarefasEl = document.getElementById('contador-tarefas');
+        const semTarefasEl = document.getElementById('sem-tarefas');
+        let tarefas = [];
+
+        socket.on('connect', () => {
+            statusEl.textContent = 'Conectado';
+            statusConexaoEl.style.background = '#28a745';
+        });
+
+        socket.on('disconnect', () => {
+            statusEl.textContent = 'Desconectado';
+            statusConexaoEl.style.background = '#dc3545';
+        });
+
+        socket.on('connect_error', (err) => {
+            statusEl.textContent = 'Erro: ' + err.message;
+            statusConexaoEl.className = 'erro';
+        });
+
+        socket.on('clientes-conectados', (contagem) => {
+            contadorClientesEl.textContent = contagem;
+        });
+
+        socket.on('tarefas-iniciais', (tarefasRecebidas) => {
+            tarefas = tarefasRecebidas;
+            renderizarTarefas();
+        });
+
+        socket.on('tarefa-criada', (tarefa) => {
+            tarefas.push(tarefa);
+            renderizarTarefas();
+        });
+
+        socket.on('tarefa-excluida', (id) => {
+            tarefas = tarefas.filter(t => t.id !== id);
+            renderizarTarefas();
+        });
+
+        socket.on('tarefa-atualizada', (tarefaAtualizada) => {
+            const index = tarefas.findIndex(t => t.id === tarefaAtualizada.id);
+            if (index !== -1) {
+                tarefas[index] = tarefaAtualizada;
+            }
+            renderizarTarefas();
+        });
+
+        function criarTarefa() {
+            const input = document.getElementById('titulo-tarefa');
+            const titulo = input.value.trim();
+            if (titulo) {
+                socket.emit('criar-tarefa', titulo);
+                input.value = '';
+                input.focus();
+            }
+        }
+
+        function excluirTarefa(id) {
+            if (confirm('Excluir esta tarefa?')) {
+                socket.emit('excluir-tarefa', id);
+            }
+        }
+
+        function iniciarEdicaoTarefa(id) {
+            const tarefaEl = document.getElementById(`tarefa-${id}`);
+            const tituloEl = document.getElementById(`titulo-${id}`);
+            const formEditEl = document.getElementById(`form-edit-${id}`);
+
+            tarefaEl.classList.add('tarefa-editando');
+            tituloEl.style.display = 'none';
+            formEditEl.classList.add('visivel');
+
+            const inputEdit = document.getElementById(`input-edit-${id}`);
+            inputEdit.value = tituloEl.textContent;
+            inputEdit.focus();
+        }
+
+        function salvarEdicaoTarefa(id) {
+            const inputEdit = document.getElementById(`input-edit-${id}`);
+            const novoTitulo = inputEdit.value.trim();
+
+            if (novoTitulo) {
+                socket.emit('editar-tarefa', { id: id, title: novoTitulo });
+            }
+            cancelarEdicaoTarefa(id);
+        }
+
+        function cancelarEdicaoTarefa(id) {
+            const tarefaEl = document.getElementById(`tarefa-${id}`);
+            const tituloEl = document.getElementById(`titulo-${id}`);
+            const formEditEl = document.getElementById(`form-edit-${id}`);
+
+            tarefaEl.classList.remove('tarefa-editando');
+            tituloEl.style.display = 'block';
+            formEditEl.classList.remove('visivel');
+        }
+
+        function alternarConclusaoTarefa(id) {
+            const tarefa = tarefas.find(t => t.id === id);
+            if (tarefa) {
+                const novoStatus = !tarefa.completed;
+                socket.emit('editar-tarefa', { id: id, completed: novoStatus });
+            }
+        }
+
+        function renderizarTarefas() {
+            contadorTarefasEl.textContent = tarefas.length;
+            semTarefasEl.style.display = tarefas.length === 0 ? 'block' : 'none';
+            listaTarefasEl.innerHTML = '';
+
+            tarefas.forEach(tarefa => {
+                const div = document.createElement('div');
+                div.className = 'tarefa';
+                div.id = `tarefa-${tarefa.id}`;
+
+                const tituloClasse = `titulo-tarefa ${tarefa.completed ? 'tarefa-concluida' : ''}`;
+                const statusTexto = tarefa.completed ? ' (Concluída)' : '';
+
+                div.innerHTML = `
+                    <div class="${tituloClasse}" id="titulo-${tarefa.id}">
+                        #${tarefa.id}: ${tarefa.title}
+                        <span class="status-concluida">${statusTexto}</span>
+                    </div>
+                    <div class="form-edit" id="form-edit-${tarefa.id}">
+                        <input type="text" id="input-edit-${tarefa.id}" placeholder="Novo título">
+                        <button onclick="salvarEdicaoTarefa(${tarefa.id})" class="btn-success">Salvar</button>
+                        <button onclick="cancelarEdicaoTarefa(${tarefa.id})" class="btn-secondary">Cancelar</button>
+                    </div>
+                    <div class="acoes-tarefa">
+                        <button onclick="alternarConclusaoTarefa(${tarefa.id})" class="btn-secondary">
+                            ${tarefa.completed ? 'Desmarcar' : 'Concluir'}
+                        </button>
+                        <button onclick="iniciarEdicaoTarefa(${tarefa.id})" class="btn-primary">Editar</button>
+                        <button onclick="excluirTarefa(${tarefa.id})" class="btn-danger">Excluir</button>
+                    </div>
+                    <small>
+                        Criada: ${formatarData(tarefa.createdAt)}
+                        ${tarefa.updatedAt ? ` | Atualizada: ${formatarData(tarefa.updatedAt)}` : ''}
+                    </small>
+                `;
+                listaTarefasEl.appendChild(div);
+            });
+        }
+
+        function formatarData(dataString) {
+            if (!dataString) return '';
+            const data = new Date(dataString);
+            return data.toLocaleTimeString('pt-BR');
+        }
+    </script>
+</body>
+</html>
