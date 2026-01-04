@@ -1,0 +1,23 @@
+{
+  "name": "todo-gateway",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.12.3",
+  "devDependencies": {
+    "typescript": "~5.9.3"
+  },
+  "peerDependencies": {
+    "socket.io-client": "^4.8.0"
+  },
+  "dependencies": {
+    "todo-domain": "link:..\\todo-domain"
+  }
+}

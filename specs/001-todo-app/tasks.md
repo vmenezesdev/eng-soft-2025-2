@@ -26,8 +26,8 @@
 
 **Purpose**: Bootstrap monorepo workspace structure and tooling
 
-- [ ] T001 Create root package.json with pnpm workspace configuration
-- [ ] T002 Create pnpm-workspace.yaml defining apps/* and packages/* workspaces
+- [?] T001 Create root package.json with pnpm workspace configuration
+- [?] T002 Create pnpm-workspace.yaml defining apps/* and packages/* workspaces
 - [ ] T003 Create root tsconfig.json with strict mode and path aliases for @repo/*
 - [ ] T004 [P] Create .gitignore for node_modules, dist, .env files
 - [ ] T005 [P] Create .eslintrc.json with TypeScript and React rules
@@ -45,11 +45,11 @@
 
 ### Shared Packages (Infrastructure)
 
-- [ ] T009 [P] Create packages/todo-domain/package.json with TypeScript dependency
-- [ ] T010 [P] Create packages/todo-domain/tsconfig.json extending root config
-- [ ] T011 [P] Create packages/todo-domain/src/Task.ts interface (id, title, createdAt, updatedAt)
-- [ ] T012 [P] Create packages/todo-domain/src/taskRules.ts validation functions (validateTitle)
-- [ ] T013 [P] Create packages/todo-domain/src/index.ts exporting Task and validation
+- [x] T009 [P] Create packages/todo-domain/package.json with TypeScript dependency
+- [x] T010 [P] Create packages/todo-domain/tsconfig.json extending root config
+- [x] T011 [P] Create packages/todo-domain/src/Task.ts interface (id, title, createdAt, updatedAt)
+- [x] T012 [P] Create packages/todo-domain/src/taskRules.ts validation functions (validateTitle)
+- [x] T013 [P] Create packages/todo-domain/src/index.ts exporting Task and validation
 
 - [ ] T014 [P] Create packages/todo-gateway/package.json with socket.io-client peer dependency
 - [ ] T015 [P] Create packages/todo-gateway/tsconfig.json extending root config
