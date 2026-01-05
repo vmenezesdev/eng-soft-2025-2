@@ -1,8 +1,12 @@
+import { useState } from "react";
+import { TaskModal } from "../components/TaskModal";
 import { Sidebar } from "../components/Sidebar";
 import { Navbar } from "../components/Navbar";
 import { TableView } from "../components/TableView";
 
 export default function HomePage() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   return (
     <div className="flex h-screen w-screen overflow-hidden bg-card-dark text-gray-300">
       <Sidebar />
@@ -18,7 +22,10 @@ export default function HomePage() {
                 Gerencie suas tarefas diárias e acompanhe o status.
               </p>
             </div>
-            <button className="flex shrink-0 items-center justify-center gap-2 rounded-lg bg-[#2b8cee] hover:bg-blue-600 text-white px-6 py-3 font-bold shadow-lg shadow-blue-500/20 transition-all active:scale-95 group">
+            <button
+              onClick={() => setIsModalOpen(true)}
+              className="flex shrink-0 items-center justify-center gap-2 rounded-lg bg-[#2b8cee] hover:bg-blue-600 text-white px-6 py-3 font-bold shadow-lg shadow-blue-500/20 transition-all active:scale-95 group"
+            >
               <span className="material-symbols-outlined group-hover:rotate-90 transition-transform duration-300">
                 add
               </span>
@@ -31,6 +38,7 @@ export default function HomePage() {
             </div>
           </div>
         </main>
+        <TaskModal open={isModalOpen} onClose={() => setIsModalOpen(false)} />
       </div>
     </div>
   );
