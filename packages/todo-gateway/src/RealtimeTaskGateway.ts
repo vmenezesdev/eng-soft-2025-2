@@ -18,10 +18,13 @@ import { validateTitle } from "../../todo-domain/src/taskRules.js";
 // | `task:list` | Server → Client | Respond with task list | No (requester only) |
 // | `task:error` | Server → Client | Operation failed | No (requester only) |
 
-const BASE_URL = "http://localhost:3000"
-
 export default class RealtimeTaskGateway implements TaskGateway {
-    private socket: Socket = io(BASE_URL);
+
+    constructor(private socketUrl: string) {
+        this.socket = io(this.socketUrl);
+    }
+
+    private socket: Socket;
 
     update(id: string, title: string): Promise<Result<Task, "not_found" | "invalid_title">> {
         return new Promise((resolve) => {

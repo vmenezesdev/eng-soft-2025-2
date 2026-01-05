@@ -6,7 +6,7 @@ export type {
     TaskGateway
 }
 
-export default {
+export {
     RestTaskGateway,
     RealtimeTaskGateway
 }

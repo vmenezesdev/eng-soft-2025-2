@@ -69,12 +69,12 @@
 - [ ] T027 [P] Create packages/todo-ui/src/EmptyState.tsx component (props-based, no store access)
 - [ ] T028 [P] Create packages/todo-ui/src/index.ts exporting all UI components
 
-- [ ] T029 [P] Create packages/todo-wiring/package.json depending on @repo/todo-gateway and @repo/todo-store
-- [ ] T030 [P] Create packages/todo-wiring/tsconfig.json extending root config
-- [ ] T031 [P] Create packages/todo-wiring/src/mode.ts type definition ('rest' | 'realtime')
-- [ ] T032 [P] Create packages/todo-wiring/src/createGateway.ts factory function for gateway selection
-- [ ] T033 [P] Create packages/todo-wiring/src/createTaskStore.ts factory wiring store with gateway
-- [ ] T034 [P] Create packages/todo-wiring/src/index.ts exporting all wiring functions
+- [x] T029 [P] Create packages/todo-wiring/package.json depending on @repo/todo-gateway and @repo/todo-store
+- [x] T030 [P] Create packages/todo-wiring/tsconfig.json extending root config
+- [x] T031 [P] Create packages/todo-wiring/src/mode.ts type definition ('rest' | 'realtime')
+- [x] T032 [P] Create packages/todo-wiring/src/createGateway.ts factory function for gateway selection
+- [x] T033 [P] Create packages/todo-wiring/src/createTaskStore.ts factory wiring store with gateway
+- [x] T034 [P] Create packages/todo-wiring/src/index.ts exporting all wiring functions
 
 ### Backend Foundation
 
