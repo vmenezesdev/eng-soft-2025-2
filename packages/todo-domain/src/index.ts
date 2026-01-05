@@ -1,6 +1,10 @@
 import { validateTitle } from "./taskRules.js";
 import type { Task } from "./Task.ts";
 
+export {
+    validateTitle
+}
+
 export default {
     validateTitle
 }

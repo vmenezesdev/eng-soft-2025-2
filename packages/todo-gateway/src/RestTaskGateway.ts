@@ -1,6 +1,5 @@
-import { Err, None, Ok, Some, type Maybe, type Result, type Task } from "@repo/packages/todo-domain";
+import { Err, None, Ok, Some, type Maybe, type Result, type Task, validateTitle } from "todo-domain";
 import type { TaskGateway } from "./TaskGateway.ts";
-import { validateTitle } from "../../todo-domain/src/taskRules.js";
 
 export default class RestTaskGateway implements TaskGateway {
 

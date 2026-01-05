@@ -5,7 +5,17 @@ import pluginReact from "eslint-plugin-react";
 import { defineConfig } from "eslint/config";
 
 export default defineConfig([
-  { files: ["**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"], plugins: { js }, extends: ["js/recommended"], languageOptions: { globals: {...globals.browser, ...globals.node} } },
+  { 
+    files: ["**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"], 
+    plugins: { js }, 
+    extends: ["js/recommended"], 
+    languageOptions: { 
+      globals: {...globals.browser, ...globals.node},
+      parserOptions: {
+        tsconfigRootDir: import.meta.dirname,
+      },
+    } 
+  },
   tseslint.configs.recommended,
   pluginReact.configs.flat.recommended,
 ]);
