@@ -64,11 +64,14 @@ importers:
         specifier: ^4.1.18
         version: 4.1.18
       todo-domain:
-        specifier: link:..\todo-domain
-        version: link:../todo-domain
+        specifier: workspace:*
+        version: link:../../packages/todo-domain
+      todo-gateway:
+        specifier: workspace:*
+        version: link:../../packages/todo-gateway
       todo-store:
-        specifier: link:..\todo-store
-        version: link:../todo-store
+        specifier: workspace:*
+        version: link:../../packages/todo-store
     devDependencies:
       '@eslint/js':
         specifier: ^9.39.1

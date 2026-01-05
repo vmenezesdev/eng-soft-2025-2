@@ -16,6 +16,12 @@
     "noEmit": true,
     "jsx": "react-jsx",
 
+    "paths": {
+      "todo-domain": ["../../packages/todo-domain/src/index.ts"],
+      "todo-store": ["../../packages/todo-store/src/index.ts"],
+      "todo-gateway": ["../../packages/todo-gateway/src/index.ts"]
+    },
+
     /* Linting */
     "strict": true,
     "noUnusedLocals": true,
