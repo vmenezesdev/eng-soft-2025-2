@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Teste Contrato Socket.IO</title>
+    <script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+    <h1>Teste Contrato Socket.IO</h1>
+    <div id="status">Status: Conectando...</div>
+    
+    <button onclick="testCreate()">Testar task:create</button>
+    <button onclick="testList()">Testar task:list</button>
+    
+    <pre id="output"></pre>
+
+    <script>
+        const socket = io('http://localhost:3000');
+        const output = document.getElementById('output');
+        const status = document.getElementById('status');
+        
+        socket.on('connect', () => {
+            status.textContent = 'Status: ✅ Conectado';
+        });
+        
+        socket.on('disconnect', () => {
+            status.textContent = 'Status: ❌ Desconectado';
+        });
+        
+        // Configurar listeners para eventos do contrato
+        socket.on('task:list', (data) => {
+            output.textContent = JSON.stringify(data, null, 2);
+        });
+        
+        socket.on('task:created', (data) => {
+            output.textContent = 'Tarefa criada: ' + JSON.stringify(data, null, 2);
+        });
+        
+        socket.on('task:updated', (data) => {
+            output.textContent = 'Tarefa atualizada: ' + JSON.stringify(data, null, 2);
+        });
+        
+        socket.on('task:deleted', (data) => {
+            output.textContent = 'Tarefa deletada: ' + JSON.stringify(data, null, 2);
+        });
+        
+        socket.on('task:error', (data) => {
+            output.textContent = '❌ Erro: ' + JSON.stringify(data, null, 2);
+        });
+        
+        function testCreate() {
+            socket.emit('task:create', { 
+                title: 'Tarefa de teste ' + new Date().toLocaleTimeString() 
+            });
+        }
+        
+        function testList() {
+            socket.emit('task:list', {});
+        }
+    </script>
+</body>
+</html>
