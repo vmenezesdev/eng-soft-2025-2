@@ -26,13 +26,13 @@
 
 **Purpose**: Bootstrap monorepo workspace structure and tooling
 
-- [?] T001 Create root package.json with pnpm workspace configuration
-- [?] T002 Create pnpm-workspace.yaml defining apps/* and packages/* workspaces
-- [ ] T003 Create root tsconfig.json with strict mode and path aliases for @repo/*
-- [ ] T004 [P] Create .gitignore for node_modules, dist, .env files
+- [x] T001 Create root package.json with pnpm workspace configuration
+- [x] T002 Create pnpm-workspace.yaml defining apps/* and packages/* workspaces
+- [?] T003 Create root tsconfig.json with strict mode and path aliases for @repo/*
+- [x] T004 [P] Create .gitignore for node_modules, dist, .env files
 - [ ] T005 [P] Create .eslintrc.json with TypeScript and React rules
 - [ ] T006 [P] Create .prettierrc with formatting configuration
-- [ ] T007 Create apps/ directory structure (frontend-mvc, frontend-mvp, frontend-mvvm, backend)
+- [x] T007 Create apps/ directory structure (frontend-mvc, frontend-mvp, frontend-mvvm, backend)
 - [ ] T008 Create packages/ directory structure (todo-domain, todo-gateway, todo-store, todo-ui, todo-wiring)
 
 ---
@@ -58,11 +58,11 @@
 - [x] T018 [P] Create packages/todo-gateway/src/RealtimeTaskGateway.ts implementing Socket.IO client
 - [x] T019 [P] Create packages/todo-gateway/src/index.ts exporting all gateway classes
 
-- [ ] T020 [P] Create packages/todo-store/package.json (no external dependencies)
-- [ ] T021 [P] Create packages/todo-store/tsconfig.json extending root config
-- [ ] T022 [P] Create packages/todo-store/src/StoreObserver.ts interface for subscriptions
-- [ ] T023 [P] Create packages/todo-store/src/TaskStore.ts observable store class (vanilla TS, no external libs)
-- [ ] T024 [P] Create packages/todo-store/src/index.ts exporting TaskStore and StoreObserver
+- [x] T020 [P] Create packages/todo-store/package.json (no external dependencies)
+- [x] T021 [P] Create packages/todo-store/tsconfig.json extending root config
+- [x] T022 [P] Create packages/todo-store/src/StoreObserver.ts concrete adapter class for subscriptions (StoreObserver) - concrete Observer that accepts an optional callback for useSyncExternalStore
+- [x] T023 [P] Create packages/todo-store/src/TaskStore.ts observable store class (vanilla TS, no external libs)
+- [x] T024 [P] Create packages/todo-store/src/index.ts exporting TaskStore and StoreObserver
 
 - [ ] T025 [P] Create packages/todo-ui/package.json with React and @mui/material dependencies
 - [ ] T026 [P] Create packages/todo-ui/tsconfig.json extending root config with jsx: react-jsx

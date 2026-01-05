@@ -225,7 +225,7 @@ eng-soft-2025-2/
 │   ├── todo-store/
 │   │   ├── src/
 │   │   │   ├── TaskStore.ts                    # Observable store (vanilla TS)
-│   │   │   ├── StoreObserver.ts                # Subscription interface
+│   │   │   ├── StoreObserver.ts                # Subscription adapter class (concrete Observer)
 │   │   │   └── index.ts
 │   │   ├── package.json
 │   │   └── tsconfig.json

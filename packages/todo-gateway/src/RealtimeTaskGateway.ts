@@ -1,5 +1,5 @@
 import { Err, None, Ok, Some, type Maybe, type Result } from "@repo/packages/todo-domain";
-import type { Task } from "../../todo-domain/src/Task.js";
+import type { Task } from "../../todo-domain/src/Task.ts";
 import type { TaskGateway } from "./TaskGateway.ts";
 import { io, type Socket } from "socket.io-client";
 import { validateTitle } from "../../todo-domain/src/taskRules.js";

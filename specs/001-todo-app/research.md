@@ -33,9 +33,11 @@ This document captures research findings for implementing MVC, MVP, and MVVM pat
 **MVVM in React**:
 - **Model**: Domain layer (same)
 - **View**: React components binding to ViewModel via custom hook
-- **ViewModel**: Observable state object (using useSyncExternalStore pattern) + command methods
-- **Flow**: User action → ViewModel command → ViewModel state change → Hook re-renders view automatically
-- **Key**: Two-way binding simulation via React hooks (useTaskViewModel subscribes to ViewModel)
+- **ViewModel**: Acts as the **Subject** in the Observer (GoF) pattern, maintaining state and notifying observers of changes.
+- **Flow**: User action → ViewModel command → ViewModel state change → **Notify** observers → Hook re-renders view automatically
+- **Key**: Implementation of the **Observer (GoF)** pattern where the ViewModel is the **Subject** and the React hook acts as the **Observer** (via a subscription adapter).
+
+**Note (Option A)**: the simplified snippet shown later (Section 4) demonstrates the React-facing adapter (subscribe / getSnapshot) used with `useSyncExternalStore`; the internal ViewModel/TaskStore implements the full GoF Subject semantics (Attach / Detach / Notify) and follows a **pull-based** snapshot model. This preserves the textbook Observer terminology for pedagogical clarity while remaining compatible with React 18's rendering model.
 
 **Alternatives Considered**:
 - Using Redux/MobX for MVVM: Rejected per RP03 constraint
@@ -112,43 +114,58 @@ VITE_BACKEND_MODE=rest  // or 'realtime'
 
 ## 4. State Management Without External Libraries
 
-### Decision: Vanilla TypeScript observable store + React useSyncExternalStore
+### Decision: Observer (GoF) Pattern with `useSyncExternalStore` Adapter
 
-**Rationale**: RP03 forbids Redux/MobX/Zustand. React 18's `useSyncExternalStore` hook enables subscription to external stores while maintaining compatibility with concurrent rendering.
+**Rationale**: To comply with the RP03 constraint (no external state libraries) while maintaining architectural rigor, we implement a textbook **Observer (GoF)** pattern. This choice is intentionally "textbook" to demonstrate classic design patterns in a modern React context.
+
+- **Subject**: The `TaskStore` (or ViewModel) acts as the **Subject**, maintaining the state and managing a collection of its dependents (**Observers**).
+- **Notification Mechanism**: Upon state mutation, the Subject triggers a **Notify** operation to alert all attached Observers.
+- **Pull Model**: The architecture follows a **Pull Model**; Observers are notified that a change occurred and subsequently "pull" the latest state snapshot from the Subject.
+- **React Integration**: The `useSyncExternalStore` hook serves as a specialized **Adapter** between the GoF Subject and React's concurrent rendering engine, bridging the gap between the imperative Observer pattern and React's declarative UI. The adapter is intentionally small and focused on bridging concerns; the fuller Subject/Observer mechanics are implemented inside the store/ViewModel.
 
 **Implementation Pattern**:
 ```typescript
 // packages/todo-store/src/TaskStore.ts
+// Note: This snippet illustrates the React-facing adapter (subscribe / getSnapshot).
+// The internal store/ViewModel implements the full Observer (GoF) Subject contract
+// (Attach / Detach / Notify) and operates as a pull-based snapshot provider.
+// Acts as the 'Subject' in GoF terminology
 export class TaskStore {
   private tasks: Task[] = [];
-  private listeners = new Set<() => void>();
+  private observers = new Set<() => void>(); // Concrete Observers
 
-  subscribe(listener: () => void) {
-    this.listeners.add(listener);
-    return () => this.listeners.delete(listener);
+  // 'Attach' operation (aliased as subscribe for React compatibility)
+  subscribe(observer: () => void) {
+    this.observers.add(observer);
+    return () => this.observers.delete(observer); // 'Detach'
   }
 
+  // 'Pull' mechanism to get current state
   getSnapshot() {
     return this.tasks;
   }
 
   addTask(task: Task) {
-    this.tasks = [task, ...this.tasks];  // Newest first
-    this.notifyListeners();
+    this.tasks = [task, ...this.tasks];
+    this.notify(); // Trigger notification
   }
 
-  private notifyListeners() {
-    this.listeners.forEach(listener => listener());
+  private notify() {
+    this.observers.forEach(observer => observer());
   }
 }
 
-// Frontend hook
+// Frontend hook acting as the Observer Adapter
 function useTaskStore(store: TaskStore) {
   return useSyncExternalStore(
     (callback) => store.subscribe(callback),
     () => store.getSnapshot()
   );
 }
+```
+
+Decision: the implementation uses the concrete `StoreObserver` class as the subscription adapter instead of requiring callers to construct `Observer` objects manually or to implement an Observer interface. `StoreObserver` accepts an optional callback (`onUpdate`) and is instantiated by `TaskStore.subscribe(listener)` to bridge React's `useSyncExternalStore` with the internal Subject. This simplifies subscription code and reduces boilerplate while trading tighter coupling between `TaskStore` and the `StoreObserver` concrete class. Additionally, this choice aligns more closely with the Gang of Four (GoF) Observer pattern, which is desirable for academic demonstration purposes.
+
 ```
 
 **Alternatives Considered**:
