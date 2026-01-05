@@ -1,11 +1,14 @@
+import { randomUUID } from 'crypto';
+
 class TaskStore {
     constructor() {
         this.tasks = new Map();
-        this.nextId = 1;
     }
 
     getAll() {
-        return Array.from(this.tasks.values());
+        return Array.from(this.tasks.values()).sort((a, b) => 
+            new Date(b.createdAt) - new Date(a.createdAt)
+        );
     }
 
     getById(id) {
@@ -13,26 +16,48 @@ class TaskStore {
     }
 
     create(title) {
+        if (!title || title.trim().length === 0) {
+            throw new Error('Title cannot be empty');
+        }
+        if (title.length > 500) {
+            throw new Error('Title must be 500 characters or less');
+        }
+
+        const now = new Date().toISOString();
         const task = {
-            id: this.nextId++,
-            title,
-            completed: false,
-            createdAt: new Date().toISOString()
+            id: randomUUID(),
+            title: title.trim(),
+            createdAt: now,
+            updatedAt: now
         };
+        
         this.tasks.set(task.id, task);
         return task;
     }
 
-    update(id, updates) {
+    update(id, newTitle) {
+        if (!newTitle || newTitle.trim().length === 0) {
+            throw new Error('Title cannot be empty');
+        }
+        if (newTitle.length > 500) {
+            throw new Error('Title must be 500 characters or less');
+        }
+
         const task = this.tasks.get(id);
-        if (!task) return null;
-        if (updates.title !== undefined) task.title = updates.title;
-        if (updates.completed !== undefined) task.completed = updates.completed;
+        if (!task) {
+            throw new Error('Task not found');
+        }
+
+        task.title = newTitle.trim();
         task.updatedAt = new Date().toISOString();
+        
         return task;
     }
 
     delete(id) {
+        if (!this.tasks.has(id)) {
+            throw new Error('Task not found');
+        }
         return this.tasks.delete(id);
     }
 }
