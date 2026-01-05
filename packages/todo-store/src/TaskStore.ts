@@ -26,7 +26,7 @@ export class TaskStore implements Subject {
   }
 
   getSnapshot(): Task[] {
-    return this.tasks.slice(); // return a copy to prevent external mutation
+    return this.tasks;
   }
 
   // State primitives (infra)
