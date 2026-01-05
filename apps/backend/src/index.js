@@ -35,37 +35,61 @@ const io = new Server(server, {
 });
 
 io.on('connection', (socket) => {
-    const clientCount = io.engine.clientsCount;
-    io.emit('clientes-conectados', clientCount);
-    socket.emit('tarefas-iniciais', taskStore.getAll());
+    console.log('Client connected:', socket.id);
 
-    socket.on('criar-tarefa', (titulo) => {
-        const novaTarefa = taskStore.create(titulo);
-        io.emit('tarefa-criada', novaTarefa);
+    socket.on('task:list', () => {
+        try {
+            const tasks = taskStore.getAll();
+            socket.emit('task:list', { tasks });
+        } catch (error) {
+            socket.emit('task:error', {
+                error: error.message,
+                operation: 'list'
+            });
+        }
     });
 
-    socket.on('excluir-tarefa', (id) => {
-        const tarefa = taskStore.getById(id);
-        if (tarefa) {
+    socket.on('task:create', ({ title }) => {
+        try {
+            const task = taskStore.create(title);
+            io.emit('task:created', { task });
+        } catch (error) {
+            socket.emit('task:error', {
+                error: error.message,
+                operation: 'create',
+                details: { title }
+            });
+        }
+    });
+
+    socket.on('task:update', ({ id, title }) => {
+        try {
+            const task = taskStore.update(id, title);
+            io.emit('task:updated', { task });
+        } catch (error) {
+            socket.emit('task:error', {
+                error: error.message,
+                operation: 'update',
+                details: { id, title }
+            });
+        }
+    });
+
+    socket.on('task:delete', ({ id }) => {
+        try {
             taskStore.delete(id);
-            io.emit('tarefa-excluida', id);
+            io.emit('task:deleted', { id });
+        } catch (error) {
+            socket.emit('task:error', {
+                error: error.message,
+                operation: 'delete',
+                details: { id }
+            });
         }
-    });
-
-    socket.on('editar-tarefa', ({ id, title, completed }) => {
-        const tarefaAtualizada = taskStore.update(id, { title, completed });
-        if (tarefaAtualizada) {
-            io.emit('tarefa-atualizada', tarefaAtualizada);
-        }
-    });
-
-    socket.on('listar-tarefas', () => {
-        socket.emit('tarefas-iniciais', taskStore.getAll());
     });
 
     socket.on('disconnect', () => {
-        const updatedCount = io.engine.clientsCount;
-        io.emit('clientes-conectados', updatedCount);
+        console.log('Client disconnected:', socket.id);
     });
 });
 
