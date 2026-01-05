@@ -1,6 +1,6 @@
 import type { Subject } from './Observer.ts';
 import { StoreObserver } from './StoreObserver.js';
-import type { Task } from '@repo/packages/todo-domain';
+import type { Task } from 'todo-domain';
 
 export class TaskStore implements Subject {
   private tasks: Task[] = [];

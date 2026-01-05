@@ -19,6 +19,8 @@
     "typescript": "~5.9.3"
   },
   "dependencies": {
-    "todo-gateway": "link:..\\todo-gateway"
+    "todo-gateway": "workspace:*",
+    "todo-store": "workspace:*",
+    "todo-domain": "workspace:*"
   }
 }

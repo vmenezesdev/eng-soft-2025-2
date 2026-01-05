@@ -1,7 +1,7 @@
 // createTaskStore.ts
-import { TaskStore } from "@repo/packages/todo-store";
-import type { TaskGateway } from "@repo/packages/todo-gateway";
-import type { Maybe, Result, Task } from "@repo/packages/todo-domain";
+import { TaskStore } from "todo-store";
+import type { TaskGateway } from "todo-gateway";
+import type { Maybe, Result, Task } from "todo-domain";
 
 // --- Ajuste estes 2 guards conforme o shape real do seu domain ---
 const isOk = <T, E>(r: Result<T, E>): r is { tag: "ok"; value: T } => r.tag === "ok";

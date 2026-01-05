@@ -10,8 +10,8 @@
  * - `socketUrl` (Realtime): URL do servidor socket.io
  */
 import type { Mode } from './mode.ts';
-import { RestTaskGateway, RealtimeTaskGateway } from '@repo/packages/todo-gateway';
-import type { TaskGateway } from '@repo/packages/todo-gateway';
+import { RestTaskGateway, RealtimeTaskGateway } from 'todo-gateway';
+import type { TaskGateway } from 'todo-gateway';
 
 export interface CreateGatewayOptions {
   /** URL base usada por `RestTaskGateway` (ex.: http://localhost:3000) */

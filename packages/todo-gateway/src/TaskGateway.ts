@@ -1,4 +1,4 @@
-import type { Maybe, Result, Task } from "@repo/packages/todo-domain";
+import type { Maybe, Result, Task } from "todo-domain";
 
 interface TaskGateway {
     create(title: string, ): Promise<Maybe<Task>>;

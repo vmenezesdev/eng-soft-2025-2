@@ -220,7 +220,7 @@ importers:
         specifier: ^4.8.0
         version: 4.8.3
       todo-domain:
-        specifier: link:..\todo-domain
+        specifier: workspace:*
         version: link:../todo-domain
     devDependencies:
       typescript:
@@ -230,7 +230,7 @@ importers:
   packages/todo-store:
     dependencies:
       todo-domain:
-        specifier: link:..\todo-domain
+        specifier: workspace:*
         version: link:../todo-domain
     devDependencies:
       typescript:
@@ -239,9 +239,15 @@ importers:
 
   packages/todo-wiring:
     dependencies:
+      todo-domain:
+        specifier: workspace:*
+        version: link:../todo-domain
       todo-gateway:
-        specifier: link:..\todo-gateway
+        specifier: workspace:*
         version: link:../todo-gateway
+      todo-store:
+        specifier: workspace:*
+        version: link:../todo-store
     devDependencies:
       typescript:
         specifier: ~5.9.3
