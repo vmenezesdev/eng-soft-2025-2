@@ -19,6 +19,9 @@ export class TaskController {
 
   async createTask(title: string): Promise<void> {
     const result = await this.gateway.create(title);
+
+    console.log("[TaskController] Gateway retornou:", result);
+
     if (result.tag === "some") {
       this.store.upsert(result.value);
     }

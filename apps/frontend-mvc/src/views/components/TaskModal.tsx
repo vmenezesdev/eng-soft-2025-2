@@ -1,10 +1,30 @@
+import { useState } from "react";
+import { taskController } from "../../wiring/taskWiring";
+
 type TaskModalProps = {
   open: boolean;
   onClose: () => void;
 };
 
 export function TaskModal({ open, onClose }: TaskModalProps) {
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+
   if (!open) return null;
+
+  async function handleSave() {
+    if (!title.trim()) return;
+
+    console.log("[TaskModal] Criando tarefa:", title);
+
+    await taskController.createTask(title);
+
+    console.log("[TaskModal] createTask retornou OK");
+
+    setTitle("");
+    setDescription("");
+    onClose();
+  }
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
@@ -25,12 +45,13 @@ export function TaskModal({ open, onClose }: TaskModalProps) {
         </div>
 
         {/* FORM */}
-        <form className="space-y-4">
+        <div className="space-y-4">
           <div>
             <label className="block text-sm text-gray-400 mb-1">Título</label>
             <input
-              className="w-full bg-background-dark border border-[#23303e] rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-primary"
-              placeholder="Ex: Comprar mantimentos"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              className="w-full bg-background-dark border border-[#23303e] rounded-lg px-3 py-2 text-white"
             />
           </div>
 
@@ -39,35 +60,12 @@ export function TaskModal({ open, onClose }: TaskModalProps) {
               Descrição
             </label>
             <textarea
-              className="w-full bg-background-dark border border-[#23303e] rounded-lg px-3 py-2 text-white resize-none focus:outline-none focus:ring-2 focus:ring-primary"
-              rows={3}
-              placeholder="Detalhes adicionais sobre a tarefa..."
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              className="w-full bg-background-dark border border-[#23303e] rounded-lg px-3 py-2 text-white resize-none"
             />
           </div>
-
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm text-gray-400 mb-1">
-                Data de Vencimento
-              </label>
-              <input
-                type="date"
-                className="w-full bg-background-dark border border-[#23303e] rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-primary"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm text-gray-400 mb-1">
-                Prioridade
-              </label>
-              <select className="w-full bg-background-dark border border-[#23303e] rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-primary">
-                <option>Baixa</option>
-                <option>Média</option>
-                <option>Alta</option>
-              </select>
-            </div>
-          </div>
-        </form>
+        </div>
 
         {/* FOOTER */}
         <div className="flex justify-end gap-3 mt-6">
@@ -77,7 +75,11 @@ export function TaskModal({ open, onClose }: TaskModalProps) {
           >
             Cancelar
           </button>
-          <button className="px-5 py-2 bg-primary text-white rounded-lg font-semibold hover:bg-blue-600">
+
+          <button
+            onClick={handleSave}
+            className="px-5 py-2 bg-primary text-white rounded-lg font-semibold hover:bg-blue-600"
+          >
             Salvar
           </button>
         </div>
