@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git fetch:*)",
+      "Bash(powershell.exe -File .specify/scripts/powershell/create-new-feature.ps1 -Json -Number 1 -ShortName \"todo-app\" \"Todo List with MVC/MVP/MVVM architectures and REST/Realtime backend modes\")",
+      "Bash(powershell.exe -File .specify/scripts/powershell/check-prerequisites.ps1 -Json -PathsOnly)",
+      "Bash(powershell.exe -File .specify/scripts/powershell/check-prerequisites.ps1 -Json)"
+    ]
+  }
+}
