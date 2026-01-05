@@ -72,7 +72,7 @@ export default class RestTaskGateway implements TaskGateway {
     }
 
 
-    async delete(id: string): Promise<Result<"success", "not_found">> {
+    async delete(id: string): Promise<Result<"success", "not_found" | "error">> {
         const response = await fetch(`${BASE_URL}/tasks/${id}`, {
             method: "DELETE",
             headers: {
@@ -85,7 +85,7 @@ export default class RestTaskGateway implements TaskGateway {
         }
 
         if (!response.ok) {
-            return Promise.resolve(Err("not_found"));
+            return Promise.resolve(Err("error"));
         }
 
         return Promise.resolve(Ok("success"));

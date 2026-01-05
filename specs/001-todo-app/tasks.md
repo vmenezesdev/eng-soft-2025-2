@@ -51,12 +51,12 @@
 - [x] T012 [P] Create packages/todo-domain/src/taskRules.ts validation functions (validateTitle)
 - [x] T013 [P] Create packages/todo-domain/src/index.ts exporting Task and validation
 
-- [ ] T014 [P] Create packages/todo-gateway/package.json with socket.io-client peer dependency
-- [ ] T015 [P] Create packages/todo-gateway/tsconfig.json extending root config
-- [ ] T016 [P] Create packages/todo-gateway/src/TaskGateway.ts interface (create, update, delete, getAll methods)
-- [ ] T017 [P] Create packages/todo-gateway/src/RestTaskGateway.ts implementing fetch-based HTTP calls
-- [ ] T018 [P] Create packages/todo-gateway/src/RealtimeTaskGateway.ts implementing Socket.IO client
-- [ ] T019 [P] Create packages/todo-gateway/src/index.ts exporting all gateway classes
+- [x] T014 [P] Create packages/todo-gateway/package.json with socket.io-client peer dependency
+- [x] T015 [P] Create packages/todo-gateway/tsconfig.json extending root config
+- [x] T016 [P] Create packages/todo-gateway/src/TaskGateway.ts interface (create, update, delete, getAll methods)
+- [x] T017 [P] Create packages/todo-gateway/src/RestTaskGateway.ts implementing fetch-based HTTP calls
+- [x] T018 [P] Create packages/todo-gateway/src/RealtimeTaskGateway.ts implementing Socket.IO client
+- [x] T019 [P] Create packages/todo-gateway/src/index.ts exporting all gateway classes
 
 - [ ] T020 [P] Create packages/todo-store/package.json (no external dependencies)
 - [ ] T021 [P] Create packages/todo-store/tsconfig.json extending root config
