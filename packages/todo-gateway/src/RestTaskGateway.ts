@@ -2,11 +2,12 @@ import { Err, None, Ok, Some, type Maybe, type Result, type Task } from "@repo/p
 import type { TaskGateway } from "./TaskGateway.ts";
 import { validateTitle } from "../../todo-domain/src/taskRules.js";
 
-const BASE_URL = "http://localhost:3000"
-
 export default class RestTaskGateway implements TaskGateway {
+
+    constructor(private baseUrl: string) {}
+
     async getAll(): Promise<Result<Array<Task>, "error">> {
-        const response = await fetch(`${BASE_URL}/tasks`, {
+        const response = await fetch(`${this.baseUrl}/tasks`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json"
@@ -28,7 +29,7 @@ export default class RestTaskGateway implements TaskGateway {
             return None;
         }
 
-        const response = await fetch(`${BASE_URL}/tasks`, {
+        const response = await fetch(`${this.baseUrl}/tasks`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -50,7 +51,7 @@ export default class RestTaskGateway implements TaskGateway {
         if (!isTitleValid) {
             return Promise.resolve(Err("invalid_title"));
         }    
-        const response = await fetch(`${BASE_URL}/tasks/${id}`, {
+        const response = await fetch(`${this.baseUrl}/tasks/${id}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json"
@@ -73,7 +74,7 @@ export default class RestTaskGateway implements TaskGateway {
 
 
     async delete(id: string): Promise<Result<"success", "not_found" | "error">> {
-        const response = await fetch(`${BASE_URL}/tasks/${id}`, {
+        const response = await fetch(`${this.baseUrl}/tasks/${id}`, {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json"

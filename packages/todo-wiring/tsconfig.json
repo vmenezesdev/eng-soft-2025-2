@@ -1,13 +1,7 @@
 {
   // Visit https://aka.ms/tsconfig to read more about this file
+  "extends": "../../tsconfig.json",  
   "compilerOptions": {
-    "baseUrl": ".",
-    "paths": {
-      "@repo/*": ["."],
-      "@repo/packages/todo-domain": ["./packages/todo-domain/src/index.ts"],
-      "@repo/packages/todo-gateway": ["./packages/todo-gateway/src/index.ts"],
-      "@repo/packages/todo-store": ["./packages/todo-store/src/index.ts"],
-    },
     // File Layout
     // "rootDir": "./src",
     // "outDir": "./dist",
