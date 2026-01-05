@@ -4,42 +4,86 @@ import taskStore from '../store.js';
 const router = Router();
 
 router.get('/tasks', (req, res) => {
-    res.json(taskStore.getAll());
+    try {
+        const tasks = taskStore.getAll();
+        res.json({ tasks });
+    } catch (error) {
+        res.status(500).json({
+            error: 'Internal server error',
+            details: { message: error.message }
+        });
+    }
 });
 
 router.post('/tasks', (req, res) => {
     const { title } = req.body;
-    if(!title) {
-        return res.status(400).json({ error: 'Titulo nao pode ser vazio'});
+    
+    try {
+        const task = taskStore.create(title);
+        req.io.emit('task:created', { task });
+        res.status(201).json(task);
+    } catch (error) {
+        if (error.message.includes('cannot be empty') || error.message.includes('500 characters')) {
+            res.status(400).json({
+                error: 'Validation failed',
+                details: { title: error.message }
+            });
+        } else {
+            res.status(500).json({
+                error: 'Internal server error',
+                details: { message: error.message }
+            });
+        }
     }
-    const newTask = taskStore.create(title);
-    req.io.emit('tarefa-criada', newTask);
-    res.status(201).json(newTask);
 });
 
 router.put('/tasks/:id', (req, res) => {
     const { id } = req.params;
-    const { title, completed } = req.body;
-    const taskAtualizada = taskStore.update(parseInt(id), { title, completed });
-    if (!taskAtualizada) {
-        return res.status(404).json({ error: 'Tarefa nao encontrada' });
+    const { title } = req.body;
+
+    try {
+        const task = taskStore.update(id, title);
+        req.io.emit('task:updated', { task });
+        res.json(task);
+    } catch (error) {
+        if (error.message.includes('Task not found')) {
+            res.status(404).json({
+                error: 'Task not found',
+                details: { id }
+            });
+        } else if (error.message.includes('cannot be empty') || error.message.includes('500 characters')) {
+            res.status(400).json({
+                error: 'Validation failed',
+                details: { title: error.message }
+            });
+        } else {
+            res.status(500).json({
+                error: 'Internal server error',
+                details: { message: error.message }
+            });
+        }
     }
-    req.io.emit('tarefa-atualizada', taskAtualizada);
-    res.json(taskAtualizada);
 });
 
 router.delete('/tasks/:id', (req, res) => {
     const { id } = req.params;
-    const task = taskStore.getById(parseInt(id));
-    if (!task) {
-        return res.status(404).json({ error: 'Tarefa nao encontrada' });
-    }
-    const deletada = taskStore.delete(parseInt(id));
-    if (deletada) {
-        req.io.emit('tarefa-excluida', parseInt(id));
+    
+    try {
+        taskStore.delete(id);
+        req.io.emit('task:deleted', { id });
         res.status(204).send();
-    } else {
-        res.status(500).json({ error: 'Erro ao excluir tarefa' });
+    } catch (error) {
+        if (error.message.includes('Task not found')) {
+            res.status(404).json({
+                error: 'Task not found',
+                details: { id }
+            });
+        } else {
+            res.status(500).json({
+                error: 'Internal server error',
+                details: { message: error.message }
+            });
+        }
     }
 });
 
