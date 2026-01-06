@@ -1,15 +1,19 @@
 import { useState, useEffect } from "react";
-import { TaskModal } from "../components/TaskModal";
-import { Sidebar } from "../components/Sidebar";
-import { Navbar } from "../components/Navbar";
-import { TableView } from "../components/TableView";
+import { Sidebar, Navbar, TableView, TaskModal } from "todo-ui";
+
 import { useTasks } from "../../adapters/useTasks";
-import type { Task } from "../../../../../packages/todo-domain/src/Task";
+import type { Task } from "todo-domain";
+import { taskController } from "../../wiring/taskWiring";
 
 export default function HomePage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingTask, setEditingTask] = useState<Task | null>(null);
-  const { tasks, load, remove, update } = useTasks();
+  const { tasks, load, remove } = useTasks();
+
+  function closeModal() {
+    setIsModalOpen(false);
+    setEditingTask(null);
+  }
 
   useEffect(() => {
     load();
@@ -63,10 +67,14 @@ export default function HomePage() {
         <TaskModal
           open={isModalOpen}
           task={editingTask}
-          onClose={() => {
-            setIsModalOpen(false);
-            setEditingTask(null);
+          onSave={({ title }) => {
+            if (editingTask) {
+              taskController.updateTask(editingTask.id, title);
+            } else {
+              taskController.createTask(title);
+            }
           }}
+          onClose={closeModal}
         />
       </div>
     </div>

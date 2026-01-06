@@ -1,59 +1,40 @@
 import { useState, useEffect } from "react";
-import { taskController } from "../../wiring/taskWiring";
-import type { Task } from "../../../../../packages/todo-domain/src/Task";
+import type { Task } from "todo-domain";
 
 type TaskModalProps = {
   open: boolean;
   task: Task | null;
+  onSave: (data: { title: string }) => void;
   onClose: () => void;
 };
 
-export function TaskModal({ open, task, onClose }: TaskModalProps) {
+export function TaskModal({ open, task, onSave, onClose }: TaskModalProps) {
   const [title, setTitle] = useState("");
 
   const isEditing = task !== null;
 
   useEffect(() => {
-    if (task) {
-      setTitle(task.title);
-    } else {
-      setTitle("");
-    }
+    setTitle(task?.title ?? "");
   }, [task, open]);
 
   if (!open) return null;
 
-  async function handleSave() {
+  function handleSave() {
     if (!title.trim()) return;
 
-    if (isEditing && task) {
-      console.log("[TaskModal] Editando tarefa:", task.id);
-
-      await taskController.updateTask(task.id, title);
-
-      console.log("[TaskModal] updateTask retornou OK");
-    } else {
-      console.log("[TaskModal] Criando tarefa:", title);
-
-      await taskController.createTask(title);
-
-      console.log("[TaskModal] createTask retornou OK");
-    }
-
+    console.log("[TaskModal] emitindo onSave:", title);
+    onSave({ title });
     onClose();
   }
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
-      {/* OVERLAY */}
       <div
         className="absolute inset-0 bg-black/70 backdrop-blur-sm"
         onClick={onClose}
       />
 
-      {/* MODAL */}
       <div className="relative w-full max-w-lg bg-card-dark border border-[#23303e] rounded-xl shadow-2xl p-6 z-10">
-        {/* HEADER */}
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-lg font-semibold text-white">
             {isEditing ? "Editar Atividade" : "Nova Atividade"}
@@ -63,19 +44,15 @@ export function TaskModal({ open, task, onClose }: TaskModalProps) {
           </button>
         </div>
 
-        {/* FORM */}
         <div className="space-y-4">
-          <div>
-            <label className="block text-sm text-gray-400 mb-1">Título</label>
-            <input
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              className="w-full bg-background-dark border border-[#23303e] rounded-lg px-3 py-2 text-white"
-            />
-          </div>
+          <label className="block text-sm text-gray-400 mb-1">Título</label>
+          <input
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            className="w-full bg-background-dark border border-[#23303e] rounded-lg px-3 py-2 text-white"
+          />
         </div>
 
-        {/* FOOTER */}
         <div className="flex justify-end gap-3 mt-6">
           <button
             onClick={onClose}
