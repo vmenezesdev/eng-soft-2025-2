@@ -1,0 +1,133 @@
+* {
+  box-sizing: border-box;
+  font-family: Inter, sans-serif;
+}
+
+body {
+  margin: 0;
+  background-color: #0f172a;
+  color: #e5e7eb;
+}
+
+.layout {
+  display: flex;
+  height: 100vh;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 240px;
+  background: #020617;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.logo {
+  margin-bottom: 30px;
+}
+
+.menu-item {
+  background: none;
+  border: none;
+  color: #9ca3af;
+  padding: 10px;
+  text-align: left;
+  cursor: pointer;
+  border-radius: 6px;
+}
+
+.menu-item:hover,
+.menu-item.active {
+  background: #1e293b;
+  color: #fff;
+}
+
+.sidebar-footer {
+  margin-top: auto;
+  color: #6b7280;
+}
+
+/* Content */
+.content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header */
+.header {
+  height: 60px;
+  padding: 0 20px;
+  background: #020617;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #1e293b;
+}
+
+.user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.user img {
+  border-radius: 50%;
+}
+
+/* Main */
+.main {
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.main-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.primary-btn {
+  background: #3b82f6;
+  border: none;
+  color: white;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* Cards */
+.card {
+  background: #020617;
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+}
+
+/* Progress */
+.progress-bar {
+  background: #1e293b;
+  height: 8px;
+  border-radius: 8px;
+  margin: 10px 0;
+}
+
+.progress {
+  width: 75%;
+  height: 100%;
+  background: #3b82f6;
+  border-radius: 8px;
+}
+
+/* Tasks */
+.task-list {
+  list-style: none;
+  padding: 0;
+}
+
+.task-list li {
+  padding: 8px 0;
+  border-bottom: 1px solid #1e293b;
+}
