@@ -4,7 +4,7 @@ import { TableItem } from "./TableItem";
 type TableViewProps = {
   tasks: Task[];
   onDelete: (id: string) => void;
-  onEdit: (id: string) => void;
+  onEdit: (task: Task) => void;
 };
 
 export function TableView({ tasks, onDelete, onEdit }: TableViewProps) {

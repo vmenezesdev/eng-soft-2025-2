@@ -4,9 +4,11 @@ import { Sidebar } from "../components/Sidebar";
 import { Navbar } from "../components/Navbar";
 import { TableView } from "../components/TableView";
 import { useTasks } from "../../adapters/useTasks";
+import type { Task } from "../../../../../packages/todo-domain/src/Task";
 
 export default function HomePage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingTask, setEditingTask] = useState<Task | null>(null);
   const { tasks, load, remove, update } = useTasks();
 
   useEffect(() => {
@@ -46,12 +48,26 @@ export default function HomePage() {
 
             {/* TABLE */}
             <div className="bg-card-dark border border-[#23303e] rounded-xl overflow-hidden shadow-lg shadow-black/20">
-              <TableView tasks={tasks} onDelete={remove} onEdit={update} />
+              <TableView
+                tasks={tasks}
+                onDelete={remove}
+                onEdit={(task) => {
+                  setEditingTask(task);
+                  setIsModalOpen(true);
+                }}
+              />
             </div>
           </div>
         </main>
 
-        <TaskModal open={isModalOpen} onClose={() => setIsModalOpen(false)} />
+        <TaskModal
+          open={isModalOpen}
+          task={editingTask}
+          onClose={() => {
+            setIsModalOpen(false);
+            setEditingTask(null);
+          }}
+        />
       </div>
     </div>
   );

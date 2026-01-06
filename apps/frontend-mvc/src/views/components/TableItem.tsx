@@ -3,7 +3,7 @@ import type { Task } from "todo-domain";
 type TableItemProps = {
   task: Task;
   onDelete: (id: string) => void;
-  onEdit: (id: string) => void;
+  onEdit: (task: Task) => void;
 };
 
 export function TableItem({ task, onDelete, onEdit }: TableItemProps) {
@@ -34,7 +34,10 @@ export function TableItem({ task, onDelete, onEdit }: TableItemProps) {
       </td>
 
       <td className="px-6 py-4 whitespace-nowrap text-right">
-        <button onClick={() => onEdit(task.id)}>
+        <button
+          onClick={() => onEdit(task)}
+          className="p-1.5 text-gray-400 hover:text-blue-400 hover:bg-[#23303e] rounded-md"
+        >
           <span className="material-symbols-outlined">edit</span>
         </button>
         <button

@@ -1,28 +1,49 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { taskController } from "../../wiring/taskWiring";
+import type { Task } from "../../../../../packages/todo-domain/src/Task";
 
 type TaskModalProps = {
   open: boolean;
+  task: Task | null;
   onClose: () => void;
 };
 
-export function TaskModal({ open, onClose }: TaskModalProps) {
+export function TaskModal({ open, task, onClose }: TaskModalProps) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+
+  const isEditing = task !== null;
+
+  // 👉 Preenche os campos quando for edição
+  useEffect(() => {
+    if (task) {
+      setTitle(task.title);
+      setDescription((task as any).description ?? "");
+    } else {
+      setTitle("");
+      setDescription("");
+    }
+  }, [task, open]);
 
   if (!open) return null;
 
   async function handleSave() {
     if (!title.trim()) return;
 
-    console.log("[TaskModal] Criando tarefa:", title);
+    if (isEditing && task) {
+      console.log("[TaskModal] Editando tarefa:", task.id);
 
-    await taskController.createTask(title);
+      await taskController.updateTask(task.id, title);
 
-    console.log("[TaskModal] createTask retornou OK");
+      console.log("[TaskModal] updateTask retornou OK");
+    } else {
+      console.log("[TaskModal] Criando tarefa:", title);
 
-    setTitle("");
-    setDescription("");
+      await taskController.createTask(title);
+
+      console.log("[TaskModal] createTask retornou OK");
+    }
+
     onClose();
   }
 
@@ -38,7 +59,9 @@ export function TaskModal({ open, onClose }: TaskModalProps) {
       <div className="relative w-full max-w-lg bg-card-dark border border-[#23303e] rounded-xl shadow-2xl p-6 z-10">
         {/* HEADER */}
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-semibold text-white">Nova Atividade</h2>
+          <h2 className="text-lg font-semibold text-white">
+            {isEditing ? "Editar Atividade" : "Nova Atividade"}
+          </h2>
           <button onClick={onClose} className="text-gray-400 hover:text-white">
             ✕
           </button>
@@ -80,7 +103,7 @@ export function TaskModal({ open, onClose }: TaskModalProps) {
             onClick={handleSave}
             className="px-5 py-2 bg-primary text-white rounded-lg font-semibold hover:bg-blue-600"
           >
-            Salvar
+            {isEditing ? "Salvar Alterações" : "Salvar"}
           </button>
         </div>
       </div>
