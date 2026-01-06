@@ -10,18 +10,14 @@ type TaskModalProps = {
 
 export function TaskModal({ open, task, onClose }: TaskModalProps) {
   const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
 
   const isEditing = task !== null;
 
-  // 👉 Preenche os campos quando for edição
   useEffect(() => {
     if (task) {
       setTitle(task.title);
-      setDescription((task as any).description ?? "");
     } else {
       setTitle("");
-      setDescription("");
     }
   }, [task, open]);
 
