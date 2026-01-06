@@ -12,7 +12,7 @@ import taskStore from './store.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const ALLOWED_ORIGINS = ["http://localhost:3000", "http://localhost:5137"];
+const ALLOWED_ORIGINS = "*";
 
 const app = express();
 const server = http.createServer(app);
