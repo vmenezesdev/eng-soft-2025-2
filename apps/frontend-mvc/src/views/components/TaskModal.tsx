@@ -77,17 +77,6 @@ export function TaskModal({ open, task, onClose }: TaskModalProps) {
               className="w-full bg-background-dark border border-[#23303e] rounded-lg px-3 py-2 text-white"
             />
           </div>
-
-          <div>
-            <label className="block text-sm text-gray-400 mb-1">
-              Descrição
-            </label>
-            <textarea
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              className="w-full bg-background-dark border border-[#23303e] rounded-lg px-3 py-2 text-white resize-none"
-            />
-          </div>
         </div>
 
         {/* FOOTER */}
