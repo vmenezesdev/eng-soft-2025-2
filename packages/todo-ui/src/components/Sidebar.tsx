@@ -2,9 +2,9 @@ import { SidebarItem } from "./SidebarItem";
 
 export function Sidebar() {
   return (
-    <aside className="hidden md:flex w-64 h-screen bg-[#1a2632] border-r border-[#23303e] flex-col shrink-0">
+    <aside className="hidden md:flex w-64 h-screen bg-card-dark border-r border-[#23303e] flex-col shrink-0 flex-nowrap overflow-hidden">
       {/* LOGO */}
-      <div className="h-16 flex items-center px-6 border-b border-[#23303e]">
+      <div className="h-16 flex items-center px-6 border-b border-[#23303e] shrink-0">
         <div className="flex items-center gap-3 text-white">
           <div className="size-8 text-primary">
             <svg

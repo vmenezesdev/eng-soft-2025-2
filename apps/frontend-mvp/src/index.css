@@ -1,25 +1,53 @@
 @import "tailwindcss";
-@import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
+@import url("https://fonts.googleapis.com/icon?family=Material+Icons+Outlined");
 
-.material-symbols-outlined {
-  font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
-  font-size: 24px;
+@theme {
+  --color-primary: #2b8cee;
+  --color-background-light: #f6f7f8;
+  --color-background-dark: #101922;
+  --color-card-light: #ffffff;
+  --color-card-dark: #1a2632;
+  --color-text-main: #111418;
+  --color-text-secondary: #617589;
+
+  --font-display: "Inter", "sans-serif";
+  --font-sans: "Inter", "sans-serif";
+}
+
+@source "../../../packages/todo-ui/src/**/*.{ts,tsx}";
+
+.material-symbols-outlined,
+.material-icons-outlined {
+  font-family: 'Material Icons Outlined' !important;
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 html,
 body,
 #root {
   height: 100%;
+  width: 100%;
 }
 
 body {
   margin: 0;
   background-color: #101922;
-}
-
-body {
+  color: #617589;
   font-family: "Inter", sans-serif;
 }
+
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
