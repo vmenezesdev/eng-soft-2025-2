@@ -26,8 +26,6 @@ export function Sidebar() {
           label="Todas as Atividades"
           active
         ></SidebarItem>
-        <SidebarItem icon="check_circle" label="Concluídas"></SidebarItem>
-        <SidebarItem icon="pending" label="Pendentes"></SidebarItem>
       </nav>
     </aside>
   );
