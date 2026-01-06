@@ -2,12 +2,8 @@
   "name": "todo-ui",
   "version": "0.0.0",
   "private": true,
-  "type": "module",
-  "main": "./src/index.ts",
-  "types": "./src/index.ts",
-  "exports": {
-    ".": "./src/index.ts"
-  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc"
   },
