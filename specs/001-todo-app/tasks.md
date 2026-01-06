@@ -132,10 +132,10 @@
 
 ### Frontend MVVM for User Story 1
 
-- [ ] T064 [P] [US1] Create apps/frontend-mvvm/package.json (same structure as MVC/MVP)
-- [ ] T065 [P] [US1] Create apps/frontend-mvvm/tsconfig.json extending root config
-- [ ] T066 [P] [US1] Create apps/frontend-mvvm/vite.config.ts with React plugin
-- [ ] T067 [P] [US1] Create apps/frontend-mvvm/index.html entry point
+- [x] T064 [P] [US1] Create apps/frontend-mvvm/package.json (same structure as MVC/MVP)
+- [x] T065 [P] [US1] Create apps/frontend-mvvm/tsconfig.json extending root config
+- [x] T066 [P] [US1] Create apps/frontend-mvvm/vite.config.ts with React plugin
+- [?] T067 [P] [US1] Create apps/frontend-mvvm/index.html entry point
 - [ ] T068 [US1] Create apps/frontend-mvvm/src/architecture/mvvm/TaskViewModel.ts observable state class (no JSX)
 - [ ] T069 [US1] Create apps/frontend-mvvm/src/architecture/mvvm/useTaskViewModel.ts React hook using useSyncExternalStore
 - [ ] T070 [US1] Create apps/frontend-mvvm/src/architecture/mvvm/wiring.ts setting up dependencies

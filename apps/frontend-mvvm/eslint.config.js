@@ -19,5 +19,10 @@ export default defineConfig([
       ecmaVersion: 2020,
       globals: globals.browser,
     },
+    parser: tseslint.parsers['@typescript-eslint/parser'],
+    parserOptions: {
+      tsconfigRootDir: __dirname,
+      project: ['./tsconfig.app.json'],
+    },
   },
 ])
