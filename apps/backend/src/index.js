@@ -12,12 +12,14 @@ import taskStore from './store.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+const ALLOWED_ORIGINS = ["http://localhost:3000", "http://localhost:5137"];
+
 const app = express();
 const server = http.createServer(app);
 
 app.use(helmet({ contentSecurityPolicy: false }));
 app.use(cors({
-  origin: "http://localhost:3000"
+  origin: ALLOWED_ORIGINS
 }));
 app.use(express.json());
 app.use(express.static(path.join(__dirname, '../public')));
@@ -31,7 +33,7 @@ app.use('/api', restRoutes);
 
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: ALLOWED_ORIGINS,
     methods: ["GET", "POST"]
   }
 });
