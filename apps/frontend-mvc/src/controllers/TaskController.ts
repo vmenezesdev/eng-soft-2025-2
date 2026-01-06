@@ -27,6 +27,14 @@ export class TaskController {
     }
   }
 
+  async updateTask(id: string, title: string): Promise<void> {
+    const result = await this.gateway.update(id, title);
+
+    if (result.tag === "ok") {
+      this.store.upsert(result.value);
+    }
+  }
+
   async deleteTask(id: string): Promise<void> {
     const result = await this.gateway.delete(id);
     if (result.tag === "ok") {

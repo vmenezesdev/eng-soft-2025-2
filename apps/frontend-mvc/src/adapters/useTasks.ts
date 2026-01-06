@@ -7,6 +7,7 @@ export function useTasks(): {
   load: () => void;
   create: (title: string) => void;
   remove: (id: string) => void;
+  update: (id: string, title: string) => void;
 } {
   const tasks = useSyncExternalStore(
     (listener) => taskStore.subscribe(listener),
@@ -25,13 +26,18 @@ export function useTasks(): {
     taskController.deleteTask(id);
   }, []);
 
+  const update = useCallback((id: string, title: string) => {
+    taskController.updateTask(id, title);
+  }, []);
+
   return useMemo(
     () => ({
       tasks,
       load,
       create,
       remove,
+      update,
     }),
-    [tasks, load, create, remove]
+    [tasks, load, create, remove, update]
   );
 }

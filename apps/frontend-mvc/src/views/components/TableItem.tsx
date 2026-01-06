@@ -1,70 +1,48 @@
+import type { Task } from "todo-domain";
+
 type TableItemProps = {
-  task: {
-    title: string;
-    description: string;
-    status: "pending" | "done" | "late";
-    dueDate: string;
-  };
+  task: Task;
+  onDelete: (id: string) => void;
+  onEdit: (id: string) => void;
 };
 
-export function TableItem({ task }: TableItemProps) {
+export function TableItem({ task, onDelete, onEdit }: TableItemProps) {
+  const createdDate = new Date(task.createdAt);
+
   return (
     <tr className="group hover:bg-[#23303e]/30 transition-colors">
-      {/* STATUS */}
-      <td className="px-6 py-4">
+      <td className="px-6 py-4 whitespace-nowrap">
         <span
-          className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-            task.status === "pending" &&
-            "bg-blue-900/30 text-blue-300 ring-1 ring-blue-500/20"
-          } ${
-            task.status === "done" &&
-            "bg-green-900/30 text-green-300 ring-1 ring-green-500/20"
-          } ${
-            task.status === "late" &&
-            "bg-orange-900/30 text-orange-300 ring-1 ring-orange-500/20"
-          }`}
+          className="inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium
+          bg-blue-900/30 text-blue-300 ring-1 ring-blue-500/20"
         >
-          {task.status === "pending" && "Pendente"}
-          {task.status === "done" && "Concluída"}
-          {task.status === "late" && "Atrasada"}
+          Criada
         </span>
       </td>
 
-      {/* TÍTULO */}
-      <td className="px-6 py-4">
-        <div
-          className={`text-sm font-medium ${
-            task.status === "done" ? "text-gray-500 line-through" : "text-white"
-          }`}
-        >
-          {task.title}
-        </div>
+      <td className="px-6 py-4 whitespace-nowrap">
+        <div className="text-sm font-medium text-white">{task.title}</div>
       </td>
 
-      {/* DESCRIÇÃO */}
-      <td className="px-6 py-4 hidden md:table-cell">
-        <div className="text-sm text-gray-400 truncate max-w-[250px]">
-          {task.description}
-        </div>
-      </td>
-
-      {/* DATA */}
-      <td className="px-6 py-4 hidden sm:table-cell">
+      <td className="px-6 py-4 whitespace-nowrap hidden sm:table-cell">
         <div className="flex items-center gap-1.5 text-sm text-gray-400">
           <span className="material-symbols-outlined text-[16px]">
             calendar_today
           </span>
-          {task.dueDate}
+          {createdDate.toLocaleDateString("pt-BR")}
         </div>
       </td>
 
-      {/* AÇÕES */}
-      <td className="px-6 py-4 text-right">
-        <div className="flex justify-end gap-1 opacity-60 group-hover:opacity-100">
-          <button className="p-1.5 hover:text-primary">👁</button>
-          <button className="p-1.5 hover:text-blue-400">✎</button>
-          <button className="p-1.5 hover:text-red-400">🗑</button>
-        </div>
+      <td className="px-6 py-4 whitespace-nowrap text-right">
+        <button onClick={() => onEdit(task.id)}>
+          <span className="material-symbols-outlined">edit</span>
+        </button>
+        <button
+          onClick={() => onDelete(task.id)}
+          className="p-1.5 text-gray-400 hover:text-red-400 hover:bg-[#23303e] rounded-md"
+        >
+          <span className="material-symbols-outlined text-[20px]">delete</span>
+        </button>
       </td>
     </tr>
   );
