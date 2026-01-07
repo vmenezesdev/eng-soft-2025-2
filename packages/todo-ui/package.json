@@ -16,7 +16,7 @@
   "sideEffects": false,
   "scripts": {
     "build": "tsc",
-    "clean": "rimraf dist",
+    "clean": "node -e \"const fs = require('fs'); if (fs.existsSync('dist')) fs.rmSync('dist', { recursive: true, force: true });\"",
     "prebuild": "pnpm run clean"
   },
   "files": [
