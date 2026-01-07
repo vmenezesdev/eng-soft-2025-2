@@ -5,7 +5,11 @@ import type { Observer, Subject } from "./Observer.js";
  * attached to.
  */
 export class StoreObserver implements Observer {
-    constructor(private onUpdate?: () => void) { }
+    private onUpdate?: () => void;
+
+    constructor(onUpdate?: () => void) {
+        this.onUpdate = onUpdate;
+     }
     update(subject: Subject): void {
         if (this.onUpdate) this.onUpdate();
         else console.log('ConcreteObserver: ...', subject);

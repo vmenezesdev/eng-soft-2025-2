@@ -2,8 +2,11 @@ import { Err, None, Ok, Some, type Maybe, type Result, type Task, validateTitle 
 import type { TaskGateway } from "./TaskGateway.ts";
 
 export default class RestTaskGateway implements TaskGateway {
+    private baseUrl: string;
 
-    constructor(private baseUrl: string) {}
+    constructor(baseUrl: string) {
+        this.baseUrl = baseUrl;
+    }
 
     async getAll(): Promise<Result<Array<Task>, "error">> {
         const response = await fetch(`${this.baseUrl}/tasks`, {

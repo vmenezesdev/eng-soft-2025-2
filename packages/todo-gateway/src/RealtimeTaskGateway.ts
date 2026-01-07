@@ -17,12 +17,13 @@ import { io, type Socket } from "socket.io-client";
 // | `task:error` | Server → Client | Operation failed | No (requester only) |
 
 export default class RealtimeTaskGateway implements TaskGateway {
+    private socketUrl: string;
+    private socket: Socket;
 
-    constructor(private socketUrl: string) {
+    constructor(socketUrl: string) {
+        this.socketUrl = socketUrl;
         this.socket = io(this.socketUrl);
     }
-
-    private socket: Socket;
 
     update(id: string, title: string): Promise<Result<Task, "not_found" | "invalid_title">> {
         return new Promise((resolve) => {
