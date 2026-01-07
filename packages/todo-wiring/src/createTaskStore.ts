@@ -30,6 +30,19 @@ export function createTaskStore(gateway: TaskGateway): {
 } {
   const store = new TaskStore();
 
+  // Subscribe to gateway events (Realtime mode support)
+  gateway.subscribe((event) => {
+    switch (event.kind) {
+      case 'created':
+      case 'updated':
+        store.upsert(event.task);
+        break;
+      case 'deleted':
+        store.removeById(event.id);
+        break;
+    }
+  });
+
   const actions: TaskActions = {
     async loadAll() {
       const res = await gateway.getAll();

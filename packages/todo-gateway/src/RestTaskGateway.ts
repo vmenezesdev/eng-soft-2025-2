@@ -1,11 +1,16 @@
 import { Err, None, Ok, Some, type Maybe, type Result, type Task, validateTitle } from "todo-domain";
-import type { TaskGateway } from "./TaskGateway.ts";
+import type { TaskGateway, TaskEvent } from "./TaskGateway.ts";
 
 export default class RestTaskGateway implements TaskGateway {
     private baseUrl: string;
 
     constructor(baseUrl: string) {
         this.baseUrl = baseUrl;
+    }
+
+    subscribe(listener: (event: TaskEvent) => void): () => void {
+        // REST does not support real-time updates
+        return () => {};
     }
 
     async getAll(): Promise<Result<Array<Task>, "error">> {

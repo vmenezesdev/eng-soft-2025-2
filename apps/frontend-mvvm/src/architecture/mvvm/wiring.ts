@@ -1,5 +1,4 @@
-import { createGateway, type Mode } from "todo-wiring";
-import { TaskStore } from "todo-store";
+import { createGateway, createTaskStore, type Mode } from "todo-wiring";
 import { TaskViewModel } from "./TaskViewModel";
 
 const mode = (import.meta.env.VITE_BACKEND_MODE as Mode) || "rest";
@@ -10,6 +9,6 @@ const gateway = createGateway(mode, {
   socketUrl: baseUrl,
 });
 
-const store = new TaskStore();
+const { store } = createTaskStore(gateway);
 
 export const taskViewModel = new TaskViewModel(store, gateway);

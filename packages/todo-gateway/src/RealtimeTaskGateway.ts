@@ -1,5 +1,5 @@
 import { Err, None, Ok, Some, type Maybe, type Result, type Task, validateTitle } from "todo-domain";
-import type { TaskGateway } from "./TaskGateway.ts";
+import type { TaskGateway, TaskEvent } from "./TaskGateway.ts";
 import { io, type Socket } from "socket.io-client";
 
 // ## Summary
@@ -23,6 +23,22 @@ export default class RealtimeTaskGateway implements TaskGateway {
     constructor(socketUrl: string) {
         this.socketUrl = socketUrl;
         this.socket = io(this.socketUrl);
+    }
+
+    subscribe(listener: (event: TaskEvent) => void): () => void {
+        const onCreated = ({ task }: { task: Task }) => listener({ kind: 'created', task });
+        const onUpdated = ({ task }: { task: Task }) => listener({ kind: 'updated', task });
+        const onDeleted = ({ id }: { id: string }) => listener({ kind: 'deleted', id });
+
+        this.socket.on('task:created', onCreated);
+        this.socket.on('task:updated', onUpdated);
+        this.socket.on('task:deleted', onDeleted);
+
+        return () => {
+            this.socket.off('task:created', onCreated);
+            this.socket.off('task:updated', onUpdated);
+            this.socket.off('task:deleted', onDeleted);
+        };
     }
 
     update(id: string, title: string): Promise<Result<Task, "not_found" | "invalid_title">> {
