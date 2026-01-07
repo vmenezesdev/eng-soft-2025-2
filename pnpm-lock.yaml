@@ -151,6 +151,9 @@ importers:
       todo-ui:
         specifier: workspace:*
         version: link:../../packages/todo-ui
+      todo-wiring:
+        specifier: workspace:*
+        version: link:../../packages/todo-wiring
     devDependencies:
       '@eslint/js':
         specifier: ^9.39.1

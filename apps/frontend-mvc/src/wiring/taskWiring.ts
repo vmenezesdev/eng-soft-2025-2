@@ -2,7 +2,6 @@ import { createGateway, createTaskStore, type Mode } from "todo-wiring";
 import { TaskController } from "../controllers/TaskController";
 
 const mode = (import.meta.env.VITE_BACKEND_MODE as Mode) || "rest";
-console.log("Backend mode:", mode);
 const baseUrl = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
 const gateway = createGateway(mode, {

@@ -18,7 +18,8 @@
     "todo-ui": "workspace:*",
     "todo-domain": "workspace:*",
     "todo-gateway": "workspace:*",
-    "todo-store": "workspace:*"
+    "todo-store": "workspace:*",
+    "todo-wiring": "workspace:*"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
