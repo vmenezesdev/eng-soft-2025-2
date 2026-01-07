@@ -8,28 +8,55 @@ function App() {
   const { tasks, loadTasks, createTask, updateTask, deleteTask } = useTaskViewModel(taskViewModel);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingTask, setEditingTask] = useState<Task | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
-    loadTasks();
-  }, []);
+    const fetch = async () => {
+      setErrorMessage(null);
+      const res = await loadTasks();
+      if (!res.ok) {
+        setErrorMessage(res.error.message);
+      }
+    };
+    fetch();
+  }, [loadTasks]);
 
   const handleCreate = () => {
+    setErrorMessage(null);
     setEditingTask(null);
     setIsModalOpen(true);
   };
 
   const handleEdit = (task: Task) => {
+    setErrorMessage(null);
     setEditingTask(task);
     setIsModalOpen(true);
   };
 
-  const handleSave = async (data: { title: string }) => {
-    if (editingTask) {
-      await updateTask(editingTask.id, data.title);
-    } else {
-      await createTask(data.title);
+  const handleDelete = async (id: string) => {
+    const res = await deleteTask(id);
+    if (!res.ok) {
+      setErrorMessage(res.error.message);
     }
-    setIsModalOpen(false);
+  };
+
+  const handleSave = async (data: { title: string }) => {
+    setErrorMessage(null);
+    let res;
+    
+    if (editingTask) {
+      res = await updateTask(editingTask.id, data.title);
+    } else {
+      res = await createTask(data.title);
+    }
+
+    // Fechar modal somente se operação foi bem-sucedida
+    if (res.ok) {
+      setIsModalOpen(false);
+    } else {
+      // Exibir erro e manter modal aberto
+      setErrorMessage(res.error.message);
+    }
   };
 
   return (
@@ -54,7 +81,7 @@ function App() {
             
             <TableView 
               tasks={tasks} 
-              onDelete={deleteTask} 
+              onDelete={handleDelete} 
               onEdit={handleEdit} 
             />
           </div>

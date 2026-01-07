@@ -6,9 +6,10 @@ type TaskModalProps = {
   task: Task | null;
   onSave: (data: { title: string }) => void;
   onClose: () => void;
+  error?: string | null;
 };
 
-export function TaskModal({ open, task, onSave, onClose }: TaskModalProps) {
+export function TaskModal({ open, task, onSave, onClose, error }: TaskModalProps) {
   const [title, setTitle] = useState("");
 
   const isEditing = task !== null;
@@ -51,6 +52,11 @@ export function TaskModal({ open, task, onSave, onClose }: TaskModalProps) {
             onChange={(e) => setTitle(e.target.value)}
             className="w-full bg-background-dark border border-[#23303e] rounded-lg px-3 py-2 text-white"
           />
+          {error && (
+            <div className="text-sm text-red-400 bg-red-500/10 border border-red-500/20 rounded-lg px-3 py-2">
+              {error}
+            </div>
+          )}
         </div>
 
         <div className="flex justify-end gap-3 mt-6">

@@ -1,4 +1,4 @@
-import { useSyncExternalStore, useMemo } from "react";
+import { useSyncExternalStore, useCallback } from "react";
 import type { TaskViewModel } from "./TaskViewModel";
 
 export function useTaskViewModel(vm: TaskViewModel) {
@@ -7,11 +7,16 @@ export function useTaskViewModel(vm: TaskViewModel) {
     () => vm.getSnapshot()
   );
 
-  return useMemo(() => ({
+  const loadTasks = useCallback(() => vm.loadTasks(), [vm]);
+  const createTask = useCallback((title: string) => vm.createTask(title), [vm]);
+  const updateTask = useCallback((id: string, title: string) => vm.updateTask(id, title), [vm]);
+  const deleteTask = useCallback((id: string) => vm.deleteTask(id), [vm]);
+
+  return {
     tasks,
-    loadTasks: () => vm.loadTasks(),
-    createTask: (title: string) => vm.createTask(title),
-    updateTask: (id: string, title: string) => vm.updateTask(id, title),
-    deleteTask: (id: string) => vm.deleteTask(id),
-  }), [vm, tasks]);
+    loadTasks,
+    createTask,
+    updateTask,
+    deleteTask,
+  };
 }
