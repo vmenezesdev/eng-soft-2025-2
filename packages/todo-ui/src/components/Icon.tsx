@@ -1,26 +1,148 @@
+import * as React from "react";
+
+type IconName = string;
+
 type IconProps = {
-  name: string;
+  name: IconName;
   className?: string;
+  size?: "sm" | "base" | "lg";
+  title?: string; // se vier, o ícone vira acessível (role="img")
 };
 
-const iconMap: Record<string, string> = {
-  format_list_bulleted: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" fill="currentColor"><path d="M120-120v-60h720v60H120Zm0-210v-60h720v60H120Zm0-210v-60h720v60H120Zm60-210v-60h660v60H180Z"/></svg>`,
-  calendar_today: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" fill="currentColor"><path d="M180-80q-24 0-42-18t-18-42v-620q0-24 18-42t42-18h100v-60h80v60h340v-60h80v60h100q24 0 42 18t18 42v620q0 24-18 42t-42 18H180Zm0-60h600v-370H180v370Zm0-430h600v-190h-60v60h-80v-60H260v60h-80v-60H120v190Zm0 0v-190 190Z"/></svg>`,
-  edit: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" fill="currentColor"><path d="M200-200h44l443-443-44-44L200-244v44Zm-20 60q-24 0-42-18t-18-42v-60h60v40h520v-360H260v40h-60v-100q0-24 18-42t42-18h520q24 0 42 18t18 42v360q0 24-18 42t-42 18H180Z"/></svg>`,
-  delete: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" fill="currentColor"><path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h120v-40h440v40h120v80h-40v520q0 33-23.5 56.5T680-120H280Zm100-160h80v-360h-80v360Zm200 0h80v-360h-80v360Z"/></svg>`,
+const sizeMap: Record<NonNullable<IconProps["size"]>, string> = {
+  sm: "size-4",
+  base: "size-5",
+  lg: "size-6",
 };
 
-export function Icon({ name, className = "" }: IconProps) {
-  const svg = iconMap[name];
+// Base de ícones (stroke consistente)
+type SvgIconProps = React.SVGProps<SVGSVGElement>;
 
-  if (!svg) {
-    return <span>{name}</span>;
+function createIcon(
+  render: (props: SvgIconProps) => React.ReactElement
+): React.FC<SvgIconProps> {
+  return function IconImpl(props) {
+    return render(props);
+  };
+}
+
+const ListIcon = createIcon((props) => (
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    {...props}
+  >
+    <path d="M8 6h13" />
+    <path d="M8 12h13" />
+    <path d="M8 18h13" />
+    <path d="M3 6h.01" />
+    <path d="M3 12h.01" />
+    <path d="M3 18h.01" />
+  </svg>
+));
+
+const CalendarIcon = createIcon((props) => (
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    {...props}
+  >
+    <rect x="3" y="4" width="18" height="18" rx="2" />
+    <path d="M16 2v4" />
+    <path d="M8 2v4" />
+    <path d="M3 10h18" />
+  </svg>
+));
+
+const EditIcon = createIcon((props) => (
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    {...props}
+  >
+    <path d="M12 20h9" />
+    <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4 11.5-11.5Z" />
+  </svg>
+));
+
+const TrashIcon = createIcon((props) => (
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    {...props}
+  >
+    <path d="M3 6h18" />
+    <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+    <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
+    <path d="M10 11v6" />
+    <path d="M14 11v6" />
+  </svg>
+));
+
+const CalendarTodayIcon = createIcon((props) => (
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    {...props}
+  >
+    <rect x="3" y="4" width="18" height="18" rx="2" />
+    <path d="M16 2v4" />
+    <path d="M8 2v4" />
+    <path d="M3 10h18" />
+    <circle cx="12" cy="14" r="2" />
+  </svg>
+));
+
+const icons: Record<string, React.ComponentType<SvgIconProps>> = {
+  list: ListIcon,
+  calendar: CalendarIcon,
+  edit: EditIcon,
+  trash: TrashIcon,
+  calendar_today: CalendarTodayIcon,
+  delete: TrashIcon,
+};
+
+export function Icon({ name, className = "", size = "base", title }: IconProps) {
+  const IconComponent = icons[name];
+  if (!IconComponent) {
+    return null; // Return null if icon not found to prevent crash
   }
+  const sizeClass = sizeMap[size];
+
+  // Acessibilidade:
+  // - sem title: decorativo (aria-hidden)
+  // - com title: role=img + <title/>
+  const a11yProps = title
+    ? { role: "img" as const, "aria-label": title, "aria-hidden": undefined }
+    : { "aria-hidden": true as const, role: undefined, "aria-label": undefined };
 
   return (
-    <span
-      className={`inline-flex items-center justify-center ${className}`}
-      dangerouslySetInnerHTML={{ __html: svg }}
-    />
+    <IconComponent
+      className={`inline-block ${sizeClass} ${className}`}
+      focusable="false"
+      {...a11yProps}
+    >
+      {title ? <title>{title}</title> : null}
+    </IconComponent>
   );
 }

@@ -1,3 +1,4 @@
+import * as React from "react";
 import type { Task } from "todo-domain";
 import { Icon } from "./Icon";
 
@@ -27,23 +28,25 @@ export function TableItem({ task, onDelete, onEdit }: TableItemProps) {
 
       <td className="px-6 py-4 whitespace-nowrap hidden sm:table-cell">
         <div className="flex items-center gap-1.5 text-sm text-gray-400">
-          <Icon name="calendar_today" className="size-4" />
+          <Icon name="calendar_today" size="sm" />
           {createdDate.toLocaleDateString("pt-BR")}
         </div>
       </td>
 
-      <td className="px-6 py-4 whitespace-nowrap text-right">
+      <td className="px-6 py-4 whitespace-nowrap text-right space-x-2">
         <button
           onClick={() => onEdit(task)}
-          className="p-1.5 text-gray-400 hover:text-blue-400 hover:bg-[#23303e] rounded-md"
+          className="inline-flex p-1.5 text-gray-400 hover:text-blue-400 hover:bg-[#23303e] rounded-md transition-colors"
+          title="Editar tarefa"
         >
-          <Icon name="edit" className="size-5" />
+          <Icon name="edit" size="base" />
         </button>
         <button
           onClick={() => onDelete(task.id)}
-          className="p-1.5 text-gray-400 hover:text-red-400 hover:bg-[#23303e] rounded-md"
+          className="inline-flex p-1.5 text-gray-400 hover:text-red-400 hover:bg-[#23303e] rounded-md transition-colors"
+          title="Deletar tarefa"
         >
-          <Icon name="delete" className="size-5" />
+          <Icon name="delete" size="base" />
         </button>
       </td>
     </tr>

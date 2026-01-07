@@ -15,7 +15,7 @@ export function SidebarItem({ icon, label, active = false }: SidebarItemProps) {
           : "text-gray-400 hover:text-white hover:bg-[#23303e] rounded-lg transition-colors"
       }`}
     >
-      <Icon name={icon} className="size-5" />
+      <Icon name={icon} size="base" />
       <span className="text-sm font-medium">{label}</span>
     </a>
   );
