@@ -11,7 +11,7 @@ function App() {
 
   useEffect(() => {
     loadTasks();
-  }, [loadTasks]);
+  }, []);
 
   const handleCreate = () => {
     setEditingTask(null);
