@@ -14,7 +14,7 @@ import { RestTaskGateway, RealtimeTaskGateway } from 'todo-gateway';
 import type { TaskGateway } from 'todo-gateway';
 
 export interface CreateGatewayOptions {
-  /** URL base usada por `RestTaskGateway` (ex.: http://localhost:3000) */
+  /** URL base usada por `RestTaskGateway` (ex.: http://localhost:3000) - será automaticamente concatenada com `/api` */
   baseUrl?: string;
   /** URL usada por `RealtimeTaskGateway` (ex.: http://localhost:3000) */
   socketUrl?: string;
@@ -30,7 +30,7 @@ export interface CreateGatewayOptions {
 export function createGateway(mode: Mode, opts: CreateGatewayOptions = {}): TaskGateway {
   if (mode === 'rest') {
     const base = opts.baseUrl ?? 'http://localhost:3000';
-    return new RestTaskGateway(base);
+    return new RestTaskGateway(`${base}/api`);
   }
   const socket = opts.socketUrl ?? 'http://localhost:3000';
   return new RealtimeTaskGateway(socket);

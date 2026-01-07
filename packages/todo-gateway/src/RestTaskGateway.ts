@@ -20,7 +20,8 @@ export default class RestTaskGateway implements TaskGateway {
             return Err("error");
         }
 
-        const tasks: Array<Task> = await response.json();
+        const data: { tasks: Array<Task> } = await response.json();
+        const tasks: Array<Task> = data.tasks;
 
         return Ok(tasks);
     }

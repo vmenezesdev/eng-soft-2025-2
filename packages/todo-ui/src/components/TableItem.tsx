@@ -1,4 +1,5 @@
 import type { Task } from "todo-domain";
+import { Icon } from "./Icon";
 
 type TableItemProps = {
   task: Task;
@@ -26,9 +27,7 @@ export function TableItem({ task, onDelete, onEdit }: TableItemProps) {
 
       <td className="px-6 py-4 whitespace-nowrap hidden sm:table-cell">
         <div className="flex items-center gap-1.5 text-sm text-gray-400">
-          <span className="material-symbols-outlined text-[16px]">
-            calendar_today
-          </span>
+          <Icon name="calendar_today" className="size-4" />
           {createdDate.toLocaleDateString("pt-BR")}
         </div>
       </td>
@@ -38,13 +37,13 @@ export function TableItem({ task, onDelete, onEdit }: TableItemProps) {
           onClick={() => onEdit(task)}
           className="p-1.5 text-gray-400 hover:text-blue-400 hover:bg-[#23303e] rounded-md"
         >
-          <span className="material-symbols-outlined">edit</span>
+          <Icon name="edit" className="size-5" />
         </button>
         <button
           onClick={() => onDelete(task.id)}
           className="p-1.5 text-gray-400 hover:text-red-400 hover:bg-[#23303e] rounded-md"
         >
-          <span className="material-symbols-outlined text-[20px]">delete</span>
+          <Icon name="delete" className="size-5" />
         </button>
       </td>
     </tr>

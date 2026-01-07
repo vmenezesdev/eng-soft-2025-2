@@ -1,3 +1,5 @@
+import { Icon } from "./Icon";
+
 type SidebarItemProps = {
   icon: string;
   label: string;
@@ -7,13 +9,13 @@ type SidebarItemProps = {
 export function SidebarItem({ icon, label, active = false }: SidebarItemProps) {
   return (
     <a
-      className={`flex items-center gap-3 px-4 py-3 ${
+      className={`flex items-center gap-3 px-4 py-3 cursor-pointer ${
         active
           ? "bg-[#2b8cee] text-white rounded-lg shadow-lg shadow-blue-500/20"
           : "text-gray-400 hover:text-white hover:bg-[#23303e] rounded-lg transition-colors"
       }`}
     >
-      <span className="material-symbols-outlined text-[20px]">{icon}</span>
+      <Icon name={icon} className="size-5" />
       <span className="text-sm font-medium">{label}</span>
     </a>
   );
