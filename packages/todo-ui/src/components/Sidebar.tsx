@@ -6,7 +6,7 @@ export function Sidebar() {
       {/* LOGO */}
       <div className="h-16 flex items-center px-6 border-b border-[#23303e] shrink-0">
         <div className="flex items-center gap-3 text-white">
-          <div className="size-8 text-primary">
+          <div className="size-8 !text-primary flex-shrink-0">
             <svg
               fill="currentColor"
               viewBox="0 0 48 48"
