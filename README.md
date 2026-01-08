@@ -1,254 +1,166 @@
-# eng-soft-2025-2
+# 🚀 eng-soft-2025-2
 
-> Trabalho Final de Engenharia de Software - Comparação de Arquiteturas Frontend e Backend
+> Trabalho Final de Engenharia de Software — Comparação de Arquiteturas Frontend e Backend
 
-## Objetivo
+## 📋 Sumário
 
-Comparar **MVC, MVP e MVVM** no frontend (React) integrados a backends **REST** e **Reativo** (WebSocket/SSE), analisando:
+- [Objetivo](#objetivo)
+- [Estrutura do projeto](#estrutura-do-projeto)
+- [Princípios arquiteturais](#princ%C3%ADpios-arquiteturais)
+- [Stack tecnológico](#stack-tecnol%C3%B3gico)
+- [Requisitos funcionais](#requisitos-funcionais)
+- [Como executar](#como-executar)
+- [Critérios de avaliação & Evidências](#crit%C3%A9rios-de-avalia%C3%A7%C3%A3o--evid%C3%AAncias)
+- [Documentação adicional](#documenta%C3%A7%C3%A3o-adicional)
+- [Equipe & Licença](#equipe--licen%C3%A7a)
+
+---
+
+## 🎯 Objetivo
+
+Comparar **MVC, MVP e MVVM** no frontend (React) integrados a backends **REST** e **Reativo** (WebSocket/SSE), avaliando:
 
 - Separação de responsabilidades
 - Impacto da arquitetura do backend sobre o frontend
 - Esforço de implementação e manutenção
 - Clareza do fluxo de dados
 
-**Foco**: Arquitetura, não estética ou complexidade funcional.
+**Foco:** arquitetura, não estética ou complexidade extra.
 
 ---
 
-## Estrutura do Projeto
+## 🗂️ Estrutura do Projeto
 
-```
-eng-soft-2025-2/
-├── apps/
-│   ├── frontend-mvc/          # Todo App implementado em MVC
-│   │   ├── src/
-│   │   │   ├── architecture/
-│   │   │   │   └── mvc/
-│   │   │   │       ├── TaskController.ts
-│   │   │   │       ├── TaskModel.ts
-│   │   │   │       └── wiring.ts
-│   │   │   ├── App.tsx
-│   │   │   └── main.tsx
-│   │   └── package.json
-│   │
-│   ├── frontend-mvp/          # Todo App implementado em MVP
-│   │   ├── src/
-│   │   │   ├── architecture/
-│   │   │   │   └── mvp/
-│   │   │   │       ├── TaskPresenter.ts
-│   │   │   │       ├── TaskView.ts
-│   │   │   │       ├── TaskViewImpl.tsx
-│   │   │   │       └── wiring.ts
-│   │   │   ├── App.tsx
-│   │   │   └── main.tsx
-│   │   └── package.json
-│   │
-│   ├── frontend-mvvm/         # Todo App implementado em MVVM
-│   │   ├── src/
-│   │   │   ├── architecture/
-│   │   │   │   └── mvvm/
-│   │   │   │       ├── TaskViewModel.ts
-│   │   │   │       ├── useTaskViewModel.ts
-│   │   │   │       └── wiring.ts
-│   │   │   ├── App.tsx
-│   │   │   └── main.tsx
-│   │   └── package.json
-│   │
-│   └── backend/               # Backend com suporte REST e Realtime
-│       ├── src/
-│       │   ├── rest/          # Endpoints HTTP (GET/POST/PUT/DELETE)
-│       │   ├── realtime/      # WebSocket/SSE para push automático
-│       │   ├── domain/        # Lógica de negócio compartilhada
-│       │   └── store/         # Camada de persistência
-│       └── package.json
-│
-├── packages/                  # Módulos compartilhados (infraestrutura)
-│   ├── todo-domain/           # Entidades e regras de negócio puras
-│   ├── todo-gateway/          # Interface para backend (REST/Realtime)
-│   ├── todo-store/            # Gerenciamento de estado (React hooks)
-│   ├── todo-ui/               # Componentes de UI reutilizáveis
-│   └── todo-wiring/           # Factory para injeção de dependências
-│
-├── docs/                      # Documentação e relatório técnico
-├── assets/
-│   ├── images/                # Screenshots de estrutura de pastas
-│   └── videos/                # Vídeo de demonstração (40-60s)
-│
-├── .specify/                  # Configuração do spec-kit
-│   └── memory/
-│       └── constitution.md    # Princípios arquiteturais do projeto
-│
-├── package.json               # Configuração do workspace (pnpm/yarn)
-├── pnpm-workspace.yaml        # Definição dos workspaces
-└── README.md
+O repositório contém três apps de frontend (MVC / MVP / MVVM) e um backend, além de pacotes compartilhados:
+
+```text
+└── eng-soft-2025-2
+    ├── apps/
+    │   ├── backend/
+    │   ├── frontend-mvc/
+    │   ├── frontend-mvp/
+    │   └── frontend-mvvm/
+    ├── packages/
+    │   ├── todo-domain/
+    │   ├── todo-gateway/
+    │   ├── todo-store/
+    │   ├── todo-ui/
+    │   └── todo-wiring/
+    ├── assets/
+    └── docs/
 ```
 
----
-
-## Princípios Arquiteturais
-
-### 1. Separação Arquitetural Clara
-
-Cada arquitetura (MVC, MVP, MVVM) em app separado com código específico isolado em `architecture/<pattern>/`:
-
-- **MVC**: View → Controller → Model → View
-- **MVP**: View → Presenter → Model → Presenter → View (Presenter sem JSX)
-- **MVVM**: View ↔ ViewModel ↔ Model (ViewModel sem JSX, binding via hooks)
-
-### 2. Módulos Compartilhados
-
-Domínio e infraestrutura reutilizados em `packages/`:
-
-- `todo-domain`: Entidades e regras (Task, validações)
-- `todo-gateway`: Comunicação com backend (RestTaskGateway, RealtimeTaskGateway)
-- `todo-store`: Estado local (sem Redux/MobX/Zustand)
-- `todo-ui`: Componentes visuais (TaskList, TaskItem, TaskForm)
-- `todo-wiring`: Factory para trocar modo REST ↔ Realtime
-
-**Importante**: Módulos compartilhados são infraestrutura, não arquitetura. A orquestração muda, o core não.
-
-### 3. Backend Dual-Mode
-
-- **REST (pull)**: HTTP endpoints, atualização manual via refresh
-- **Realtime (push)**: WebSocket/SSE, propagação automática ≤1s
-
-**Demonstração obrigatória**: Duas instâncias abertas → criar/excluir tarefa em uma → observar comportamento em ambos os modos.
-
-### 4. Apenas React Hooks
-
-Sem Redux, MobX, Zustand, RxJS, Jotai, Recoil, XState.
-Estado gerenciado com `useState`, `useReducer`, `useContext`, `useSyncExternalStore`.
-
-### 5. Simplicidade
-
-Implementar **apenas** os requisitos obrigatórios:
-
-- RF01: Criar tarefa
-- RF02: Remover tarefa
-- RF03: Listar tarefas
-- RF04: Editar tarefa
-
-Sem autenticação, paginação, UI sofisticada ou features extras.
+(Árvore completa no README original.)
 
 ---
 
-## Stack Tecnológico
+## 🧭 Princípios Arquiteturais
 
-| Camada | Tecnologia |
-|--------|-----------|
-| Frontend | React 18+ com TypeScript |
-| Backend | Express.js + Socket.IO (ou equivalente) |
-| Estado | React Hooks (useState, useReducer, useContext) |
-| UI | Material-UI ou Chakra UI (estilo minimalista) |
-| Workspace | pnpm workspaces (ou yarn/npm workspaces) |
-| Deploy | Vite (local) ou CodeSandbox/StackBlitz |
+1. **Separação arquitetural clara** — cada padrão em app separado (`architecture/<pattern>/`).
+   - MVC: View → Controller → Model → View
+   - MVP: View → Presenter → Model → Presenter → View (Presenter sem JSX)
+   - MVVM: View ↔ ViewModel ↔ Model (ViewModel sem JSX, binding via hooks)
 
----
+2. **Módulos compartilhados** — domínio e infra em `packages/`:
+   - `todo-domain`, `todo-gateway`, `todo-store`, `todo-ui`, `todo-wiring`
 
-## Requisitos Funcionais
+3. **Backend dual-mode**
+   - REST (pull): atualizações via refresh
+   - Realtime (push): WebSocket/SSE, propagação automática ≤ 1s
 
-| Código | Nome | Descrição |
-|--------|------|-----------|
-| **RF01** | Criar tarefa | Adicionar nova tarefa (persistida, propagada em realtime) |
-| **RF02** | Remover tarefa | Excluir tarefa existente (persistida, propagada em realtime) |
-| **RF03** | Listar tarefas | Exibir todas as tarefas ao abrir app |
-| **RF04** | Editar tarefa | Alterar título de tarefa existente (persistida, propagada em realtime) |
+4. **Apenas React Hooks** — `useState`, `useReducer`, `useContext`, `useSyncExternalStore` (sem Redux/MobX/etc.).
 
-### Requisitos Não-Funcionais
-
-- **RNF01**: Propagação em modo reativo com latência ≤1s
-- **RNF02**: Consistência entre múltiplas instâncias conectadas
+5. **Simplicidade por requisito** — implementar somente: criar, remover, listar e editar tarefas.
 
 ---
 
-## Como Executar
+## 🛠️ Stack Tecnológico
+
+| Camada     | Tecnologia                                  |
+|------------|---------------------------------------------|
+| Frontend   | React 18+ com TypeScript                    |
+| Backend    | Express.js + Socket.IO (ou equivalente)     |
+| Estado     | React Hooks                                 |
+| UI         | Material-UI ou Chakra UI (minimalista)     |
+| Workspace  | pnpm workspaces                              |
+| Deploy     | Vite (local) / CodeSandbox / StackBlitz     |
+
+---
+
+## ✅ Requisitos Funcionais
+
+| Código   | Nome        | Descrição                                                          |
+|----------|-------------|--------------------------------------------------------------------|
+| RF01     | Criar tarefa| Adicionar nova tarefa (persistida e propagada em modo realtime)     |
+| RF02     | Remover tarefa| Excluir tarefa (persistida e propagada)                            |
+| RF03     | Listar tarefas| Exibir todas as tarefas ao abrir o app                             |
+| RF04     | Editar tarefa| Alterar título de tarefa existente (persistida e propagada)        |
+
+**Não-Funcionais:** RNF01 (latência ≤1s em modo reativo), RNF02 (consistência entre instâncias).
+
+---
+
+## ▶️ Como Executar
 
 ### Pré-requisitos
 
-- Node.js 18+ e pnpm (ou yarn/npm)
+- Node.js 18+ e pnpm (ou npm/yarn)
 - Git
 
-### Instalação
+### Passos rápidos
 
 ```bash
-# Clonar repositório
+# Clonar
 git clone https://github.com/vmenezesdev/todo-list-eng-soft-2025-2.git
 cd eng-soft-2025-2
-
-# Instalar dependências (todos os workspaces)
 pnpm install
 
-# Executar backend
-cd apps/backend
-pnpm dev
+# Rodar backend
+cd apps/backend && pnpm dev
 
-# Em outro terminal, executar frontend MVC
-cd apps/frontend-mvc
-pnpm dev
-
-# Para testar MVP ou MVVM, trocar para frontend-mvp ou frontend-mvvm
+# Em outra janela, rodar frontend (ex.: MVC)
+cd apps/frontend-mvc && pnpm dev
 ```
 
-### Trocar Modo REST ↔ Realtime
-
-Configurar variável de ambiente no frontend:
+Para alternar modo REST ↔ Realtime, defina no frontend:
 
 ```env
-VITE_BACKEND_MODE=rest      # ou "realtime"
+VITE_BACKEND_MODE=rest   # ou "realtime"
 ```
 
 ---
 
-## Critérios de Avaliação
+## 🧾 Critérios de Avaliação & Evidências
 
-| Critério | Peso | O que demonstrar |
-|----------|------|------------------|
-| Implementação das 3 arquiteturas | 40% | Código funcional + estrutura de pastas clara |
-| Integração REST + Reativa | 25% | Vídeo mostrando dual-mode com 2 instâncias |
-| Evidências (prints + vídeo) | 20% | Screenshots de código + vídeo 40-60s |
-| Análise crítica no relatório | 15% | Respostas baseadas na implementação real |
+- Implementação das 3 arquiteturas (40%)
+- Integração REST + Reativa com prova em vídeo (25%)
+- Evidências (prints + vídeo 40–60s) (20%)
+- Relatório técnico (15%)
 
----
+### Evidências obrigatórias
 
-## Evidências Obrigatórias
-
-### 1. Screenshots
-
-- [ ] Estrutura de pastas de cada arquitetura (MVC, MVP, MVVM)
-- [ ] Código-fonte principal (Controller, Presenter, ViewModel)
-- [ ] Projeto aberto na IDE
-
-### 2. Vídeo (40-60 segundos)
-
-- [ ] Duas instâncias do app abertas lado a lado
-- [ ] Criar/excluir tarefa em uma instância
-- [ ] Demonstrar comportamento REST (refresh manual)
-- [ ] Demonstrar comportamento Realtime (propagação automática)
-
-### 3. Relatório Técnico (máx. 2 páginas)
-
-- [ ] Onde ficou a maior parte da lógica em cada arquitetura?
-- [ ] Qual arquitetura foi mais simples de integrar com backend reativo?
-- [ ] O que mudou no frontend ao trocar REST por reativo?
-- [ ] Qual arquitetura escolheria para sistema maior? Por quê?
+- [ ] Screenshots: estrutura de pastas e arquivos centrais
+- [ ] Vídeo (40–60s): duas instâncias, criar/excluir, demonstrar REST e Realtime
+- [ ] Relatório técnico (máx. 2 páginas): análise das escolhas
 
 ---
 
-## Documentação Adicional
+## 📚 Documentação Adicional
 
-- **Constituição do Projeto**: `.specify/memory/constitution.md` (princípios detalhados)
-- **Relatório Técnico**: `docs/` (análise comparativa final)
-- **Evidências**: `assets/images/` e `assets/videos/`
+- `.specify/memory/constitution.md` — princípios detalhados
+- `docs/` — relatório final
+- `assets/images/`, `assets/videos/` — evidências
 
 ---
 
-## Equipe
+## 👥 Equipe
 
 Trabalho em equipe de até 4 membros.
 
 ---
 
-## Licença
+## 📝 Licença
 
-Projeto acadêmico - Engenharia de Software 2025.2
-**Professor**: César Olavo
+Projeto acadêmico — Engenharia de Software 2025.2
+**Professor:** César Olavo
+
