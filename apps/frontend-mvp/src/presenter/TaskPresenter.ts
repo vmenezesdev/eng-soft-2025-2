@@ -146,7 +146,7 @@ export class TaskPresenter {
     this.setLoading(true);
     this.setError(null);
     try {
-      const res = await (this.gateway as any).delete(id);
+      const res = await this.gateway.delete(id);
       if (res.tag === "ok") {
         await this.loadTasks();
         return { ok: true };
