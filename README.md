@@ -151,7 +151,7 @@ VITE_BACKEND_MODE=rest   # ou "realtime"
 ## 📚 Documentação Adicional
 
 - `.specify/memory/constitution.md` — princípios detalhados
-- `docs/` — relatório final
+- `docs/relatorio.pdf` — relatório final
 - `assets/images/`, `assets/videos/` — evidências
 
 ---
