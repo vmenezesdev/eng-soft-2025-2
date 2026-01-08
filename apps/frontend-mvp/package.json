@@ -15,10 +15,10 @@
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "tailwindcss": "^4.1.18",
-    "todo-ui": "workspace:*",
     "todo-domain": "workspace:*",
     "todo-gateway": "workspace:*",
     "todo-store": "workspace:*",
+    "todo-ui": "workspace:*",
     "todo-wiring": "workspace:*"
   },
   "devDependencies": {
@@ -35,6 +35,7 @@
     "globals": "^16.5.0",
     "typescript": "~5.9.3",
     "typescript-eslint": "^8.46.4",
-    "vite": "^7.2.4"
+    "vite": "^7.2.4",
+    "vitest": "^1.6.1"
   }
 }

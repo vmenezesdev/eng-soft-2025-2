@@ -19,7 +19,7 @@ export default class ErrorBoundary extends React.Component<Props, State> {
     return { hasError: true, error };
   }
 
-  componentDidCatch(error: Error, info: React.ErrorInfo) {
+  componentDidCatch() {
     // Could send to a logging endpoint here
     // console.error("Uncaught error in subtree:", error, info);
   }

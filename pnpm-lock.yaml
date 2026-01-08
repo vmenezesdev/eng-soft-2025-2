@@ -200,6 +200,9 @@ importers:
       vite:
         specifier: ^7.2.4
         version: 7.3.0(@types/node@24.10.4)(jiti@2.6.1)(lightningcss@1.30.2)
+      vitest:
+        specifier: ^1.6.1
+        version: 1.6.1(@types/node@24.10.4)(lightningcss@1.30.2)
 
   apps/frontend-mvvm:
     dependencies:
