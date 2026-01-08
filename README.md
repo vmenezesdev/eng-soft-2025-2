@@ -57,14 +57,17 @@ O repositório contém três apps de frontend (MVC / MVP / MVVM) e um backend, a
 ## 🧭 Princípios Arquiteturais
 
 1. **Separação arquitetural clara** — cada padrão em app separado (`architecture/<pattern>/`).
+
    - MVC: View → Controller → Model → View
    - MVP: View → Presenter → Model → Presenter → View (Presenter sem JSX)
    - MVVM: View ↔ ViewModel ↔ Model (ViewModel sem JSX, binding via hooks)
 
 2. **Módulos compartilhados** — domínio e infra em `packages/`:
+
    - `todo-domain`, `todo-gateway`, `todo-store`, `todo-ui`, `todo-wiring`
 
 3. **Backend dual-mode**
+
    - REST (pull): atualizações via refresh
    - Realtime (push): WebSocket/SSE, propagação automática ≤ 1s
 
@@ -76,25 +79,25 @@ O repositório contém três apps de frontend (MVC / MVP / MVVM) e um backend, a
 
 ## 🛠️ Stack Tecnológico
 
-| Camada     | Tecnologia                                  |
-|------------|---------------------------------------------|
-| Frontend   | React 18+ com TypeScript                    |
-| Backend    | Express.js + Socket.IO (ou equivalente)     |
-| Estado     | React Hooks                                 |
-| UI         | Material-UI ou Chakra UI (minimalista)     |
-| Workspace  | pnpm workspaces                              |
-| Deploy     | Vite (local) / CodeSandbox / StackBlitz     |
+| Camada    | Tecnologia                              |
+| --------- | --------------------------------------- |
+| Frontend  | React 18+ com TypeScript                |
+| Backend   | Express.js + Socket.IO (ou equivalente) |
+| Estado    | React Hooks                             |
+| UI        | Material-UI ou Chakra UI (minimalista)  |
+| Workspace | pnpm workspaces                         |
+| Deploy    | Vite (local) / CodeSandbox / StackBlitz |
 
 ---
 
 ## ✅ Requisitos Funcionais
 
-| Código   | Nome        | Descrição                                                          |
-|----------|-------------|--------------------------------------------------------------------|
-| RF01     | Criar tarefa| Adicionar nova tarefa (persistida e propagada em modo realtime)     |
-| RF02     | Remover tarefa| Excluir tarefa (persistida e propagada)                            |
-| RF03     | Listar tarefas| Exibir todas as tarefas ao abrir o app                             |
-| RF04     | Editar tarefa| Alterar título de tarefa existente (persistida e propagada)        |
+| Código | Nome           | Descrição                                                       |
+| ------ | -------------- | --------------------------------------------------------------- |
+| RF01   | Criar tarefa   | Adicionar nova tarefa (persistida e propagada em modo realtime) |
+| RF02   | Remover tarefa | Excluir tarefa (persistida e propagada)                         |
+| RF03   | Listar tarefas | Exibir todas as tarefas ao abrir o app                          |
+| RF04   | Editar tarefa  | Alterar título de tarefa existente (persistida e propagada)     |
 
 **Não-Funcionais:** RNF01 (latência ≤1s em modo reativo), RNF02 (consistência entre instâncias).
 
@@ -153,6 +156,15 @@ VITE_BACKEND_MODE=rest   # ou "realtime"
 
 ---
 
+## 😁 Acessar o site do projeto
+
+https://mvc-eng-soft-2025-2.onrender.com/
+https://mvp-eng-soft-2025-2.onrender.com/
+https://mvvm-eng-soft-2025-2.onrender.com/
+https://backend-eng-soft-2025-2.onrender.com/
+
+---
+
 ## 👥 Equipe
 
 Trabalho em equipe de até 4 membros.
@@ -163,4 +175,3 @@ Trabalho em equipe de até 4 membros.
 
 Projeto acadêmico — Engenharia de Software 2025.2
 **Professor:** César Olavo
-
