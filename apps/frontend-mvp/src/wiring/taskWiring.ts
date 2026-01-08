@@ -1,10 +1,15 @@
-import { TaskStore } from "todo-store";
-import { RestTaskGateway } from "todo-gateway";
+import { createGateway, createTaskStore, type Mode } from "todo-wiring";
 import { TaskPresenter } from "../presenter/TaskPresenter";
 
-// create concrete instances for the app wiring
-const taskStore = new TaskStore();
-const gateway = new RestTaskGateway("http://localhost:3000");
+const mode = (import.meta.env.VITE_BACKEND_MODE as Mode) || "rest";
+const baseUrl = import.meta.env.VITE_API_URL || "http://localhost:3000";
+
+const gateway = createGateway(mode, {
+  baseUrl,
+  socketUrl: baseUrl,
+});
+
+const { store } = createTaskStore(gateway);
 
 // export only the presenter so views cannot access the store directly
-export const taskPresenter = new TaskPresenter(taskStore, gateway);
+export const taskPresenter = new TaskPresenter(store, gateway);
