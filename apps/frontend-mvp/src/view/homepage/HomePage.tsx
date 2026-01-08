@@ -32,10 +32,10 @@ export default function HomePage() {
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
               <div>
                 <h1 className="text-3xl font-bold text-white tracking-tight">
-                  Atividades
+                  Atividades • MVP • {import.meta.env.VITE_BACKEND_MODE === 'realtime' ? 'Realtime' : 'REST'}
                 </h1>
                 <p className="text-gray-400 mt-2 text-base">
-                  Gerencie suas tarefas diárias e acompanhe o status.
+                  Arquitetura: <span className="font-semibold">MVP</span> • Modo: <span className="font-semibold">{import.meta.env.VITE_BACKEND_MODE === 'realtime' ? 'Realtime (WebSocket)' : 'REST (Pull)'}</span>
                 </p>
               </div>
 

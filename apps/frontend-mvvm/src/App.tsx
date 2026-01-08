@@ -68,8 +68,8 @@ function App() {
           <div className="max-w-7xl mx-auto space-y-6">
             <div className="flex items-center justify-between">
               <div>
-                <h1 className="text-2xl font-bold">Arquitetura MVVM</h1>
-                <p className="text-text-secondary text-sm">Gerenciamento de tarefas em tempo real</p>
+                <h1 className="text-2xl font-bold">Atividades • MVVM • {import.meta.env.VITE_BACKEND_MODE === 'realtime' ? 'Realtime' : 'REST'}</h1>
+                <p className="text-text-secondary text-sm">Arquitetura: <span className="font-semibold">MVVM</span> • Modo: <span className="font-semibold">{import.meta.env.VITE_BACKEND_MODE === 'realtime' ? 'Realtime (WebSocket)' : 'REST (Pull)'}</span></p>
               </div>
               <button 
                 onClick={handleCreate}
