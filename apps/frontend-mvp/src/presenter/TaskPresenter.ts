@@ -146,8 +146,7 @@ export class TaskPresenter {
     this.setLoading(true);
     this.setError(null);
     try {
-      // gateway method might be `remove`; adapt if your gateway uses `delete`
-      const res = await (this.gateway as any).remove(id);
+      const res = await (this.gateway as any).delete(id);
       if (res.tag === "ok") {
         await this.loadTasks();
         return { ok: true };
