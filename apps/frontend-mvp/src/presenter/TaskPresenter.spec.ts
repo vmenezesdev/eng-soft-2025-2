@@ -3,7 +3,8 @@ import { TaskPresenter } from "./TaskPresenter";
 import { TaskStore } from "todo-store";
 import type { Task } from "todo-domain";
 
-const makeTask = (id = "1", title = "task"): Task => ({ id, title });
+const now = new Date().toISOString();
+const makeTask = (id = "1", title = "task"): Task => ({ id, title, createdAt: now, updatedAt: now });
 
 describe("TaskPresenter", () => {
   let store: TaskStore;
@@ -30,7 +31,7 @@ describe("TaskPresenter", () => {
     expect(listener).toHaveBeenCalled();
     const snap = presenter.getSnapshot();
     expect(snap.tasks.length).toBe(1);
-    expect(snap.tasks[0].name).toBe("A");
+    expect(snap.tasks[0].title).toBe("A");
   });
 
   it("loadTasks sets loading and updates tasks on success", async () => {
@@ -45,7 +46,7 @@ describe("TaskPresenter", () => {
     const last = snapshots[snapshots.length - 1];
     expect(first.loading).toBe(true);
     expect(last.loading).toBe(false);
-    expect(last.tasks[0].name).toBe("Load");
+    expect(last.tasks[0].title).toBe("Load");
   });
 
   it("createTask handles invalid-title tag", async () => {
@@ -61,6 +62,6 @@ describe("TaskPresenter", () => {
 
     await presenter.createTask("New");
     const snap = presenter.getSnapshot();
-    expect(snap.tasks.some((t) => t.name === "New")).toBe(true);
+    expect(snap.tasks.some((t) => t.title === "New")).toBe(true);
   });
 });

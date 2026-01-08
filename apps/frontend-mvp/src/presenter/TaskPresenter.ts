@@ -2,16 +2,8 @@ import { TaskStore } from "todo-store";
 import type { TaskGateway } from "todo-gateway";
 import type { Task } from "todo-domain";
 
-export interface TaskViewItem {
-  id: string;
-  name: string;
-  completed: boolean;
-  // UI-only flags
-  isEditing?: boolean;
-}
-
 export interface TasksView {
-  tasks: TaskViewItem[];
+  tasks: Task[];
   modalState: "open" | "closed";
   loading: boolean;
   error: string | null;
@@ -27,13 +19,11 @@ export class TaskPresenter {
     loading: false,
     error: null,
   };
-  private unsubscribeFromStore?: () => void;
-
   constructor(store: TaskStore, gateway: TaskGateway) {
     this.store = store;
     this.gateway = gateway;
     // keep presenter-local UI state in sync with underlying store
-    this.unsubscribeFromStore = this.store.subscribe(() => this.syncFromStore());
+    this.store.subscribe(() => this.syncFromStore());
     this.syncFromStore();
   }
 
@@ -43,26 +33,32 @@ export class TaskPresenter {
     return () => this.listeners.delete(listener);
   }
 
+  private _version = 0;
+  private _lastSnapshot?: TasksView;
+  private _lastSnapshotVersion = -1;
+
   private notify(): void {
+    // bump internal version so cached snapshot is invalidated
+    this._version++;
     for (const l of this.listeners) l();
   }
 
   // Snapshot API for useSyncExternalStore
+  // Return a cached reference unless the presenter state actually changed
   getSnapshot(): TasksView {
-    return { ...this.viewState, tasks: this.viewState.tasks.slice() };
-  }
-
-  private mapTaskToView(t: Task): TaskViewItem {
-    return {
-      id: t.id,
-      name: t.title,
-      completed: Boolean((t as any).completed),
-    };
+    if (this._lastSnapshot && this._lastSnapshotVersion === this._version) {
+      return this._lastSnapshot;
+    }
+    const snapshot = { ...this.viewState, tasks: this.viewState.tasks.slice() };
+    this._lastSnapshot = snapshot;
+    this._lastSnapshotVersion = this._version;
+    return snapshot;
   }
 
   private syncFromStore(): void {
     const tasks = this.store.getSnapshot();
-    this.viewState.tasks = tasks.map((t) => this.mapTaskToView(t));
+    // store.getSnapshot already returns Task[]; keep a shallow copy for immutability
+    this.viewState.tasks = tasks.slice();
     this.notify();
   }
 

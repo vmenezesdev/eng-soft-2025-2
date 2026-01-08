@@ -1,9 +1,10 @@
 import { useSyncExternalStore, useCallback, useMemo } from "react";
 import { taskPresenter } from "../wiring/taskWiring";
-import type { TaskViewItem, TasksView } from "../presenter/TaskPresenter";
+import type { TasksView } from "../presenter/TaskPresenter";
+import type { Task } from "todo-domain";
 
 export function useTasks(): {
-  tasks: TaskViewItem[];
+  tasks: Task[];
   loading: boolean;
   error: string | null;
   modalState: "open" | "closed";
