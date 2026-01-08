@@ -8,7 +8,7 @@ export default class RestTaskGateway implements TaskGateway {
         this.baseUrl = baseUrl;
     }
 
-    subscribe(listener: (event: TaskEvent) => void): () => void {
+    subscribe(_listener: (event: TaskEvent) => void): () => void {
         // REST does not support real-time updates
         return () => {};
     }

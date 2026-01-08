@@ -8,7 +8,7 @@ function App() {
   const { tasks, loadTasks, createTask, updateTask, deleteTask } = useTaskViewModel(taskViewModel);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingTask, setEditingTask] = useState<Task | null>(null);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [_errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
     const fetch = async () => {
