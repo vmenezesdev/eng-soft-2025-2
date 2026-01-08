@@ -1,4 +1,3 @@
-import * as React from "react";
 import type { Task } from "todo-domain";
 import { Icon } from "./Icon";
 
