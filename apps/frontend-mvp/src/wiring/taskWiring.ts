@@ -1,15 +1,9 @@
-import { createGateway, createTaskStore, type Mode } from "todo-wiring";
+import { taskStore } from "todo-store";
+import { RestTaskGateway } from "todo-gateway";
 import { TaskPresenter } from "../presenter/TaskPresenter";
 
-const mode = (import.meta.env.VITE_BACKEND_MODE as Mode) || "rest";
-const baseUrl = import.meta.env.VITE_API_URL || "http://localhost:3000";
+// Adjust if the gateway export is different; this assumes RestTaskGateway is a class constructor
+const gateway = new (RestTaskGateway as any)();
 
-
-const gateway = createGateway(mode, {
-    baseUrl,
-    socketUrl: baseUrl,
-});
-
-export const { store: taskStore } = createTaskStore(gateway);
-export const taskGateway = gateway;
-export const taskPresenter = new TaskPresenter(taskStore, taskGateway);
+// export only the presenter so views cannot access the store directly
+export const taskPresenter = new TaskPresenter(taskStore, gateway);
